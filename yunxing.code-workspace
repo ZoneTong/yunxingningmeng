@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "/opt/gopath/src/github.com/andlabs/ui"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap-table.min.css">
+    <link href="common.css" rel="stylesheet">
+    <style>
+    
+    </style>
+</head>
+<body onload="">
+    <table id="table" data-toolbar=".toolbar" data-height="400" data-virtual-scroll="true" data-show-columns="true">
+        <thead>
+            <tr>
+                <th data-field="id">ID</th>
+                <th data-field="name">Item Name</th>
+                <th data-field="price">Item Price</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="bootstrap-table.min.js"></script>
+    <script src="bootstrap-table-zh-CN.min.js"></script>
+    <script src="common.js"></script>
+    <script>
+        var $table = $('#table');
+        $table.bootstrapTable({data: []});
+    </script>
+</body>
+</html>
