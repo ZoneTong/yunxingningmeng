@@ -46,7 +46,7 @@ NEWUI:
 	ui.Bind("tableUI", func() {
 		curUI = tableUI
 		bd, _ := ui.Bounds()
-		bd.Width = 1270
+		bd.Width = 1350
 		bd.Height = 800
 		ui.SetBounds(bd)
 	})

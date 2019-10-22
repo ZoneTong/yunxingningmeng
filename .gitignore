@@ -1,1 +1,4 @@
 lorcamgr/lorcamgr
+tmp.*
+*tmp
+*.DS_Store

@@ -1,53 +1,51 @@
 <!doctype html>
 <html>
-	<head>
-		<title>运兴合作社管理软件</title>
-		<link rel="shortcut icon" href="favicon.png">
 
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/common.css" rel="stylesheet">
-	</head>
-	<body >
-		<!-- UI layout -->
-		<div class="container ">
-			<div class="form-group">
-				<div class="col-xs-12"> <input type="text" id="account" placeholder="账号" class="form-control" value="yunxing" />
-				</div>
-		
-				<div class="col-xs-12"> <input type="password" id="password" placeholder="密码" class="form-control" value="750588" />
-				</div>
-		
-				<!-- <div class="col-xs-8"> <button type="button" class="btn btn-default btn-sm btn-block">修改密码</button>  </div> -->
-				<div class="col-xs-12"> <button type="submit" class="btn btn-primary btn-sm btn-block" id="login">登陆</button>
-				</div>
+<head>
+	<title>运兴合作社管理软件</title>
+	<link rel="shortcut icon" href="ningmeng.ico">
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
+	<link href="common.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-- UI layout -->
+	<div class="container ">
+		<div class="form-group">
+			<div class="col-xs-12"> <input type="text" id="account" placeholder="账号" class="form-control"
+					value="yunxing" />
+			</div>
+			<div class="col-xs-12"> <input type="password" id="password" placeholder="密码" class="form-control"
+					value="750588" />
+			</div>
+			<div class="col-xs-12"> <button type="submit" class="btn btn-info btn-sm btn-block" id="login">登陆</button>
 			</div>
 		</div>
-		 
-		<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-		<script src="js/jquery.min.js"></script>
-		<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-		<script src="js/bootstrap.min.js"></script>
-		<!-- Connect UI actions to Go functions -->
-		<script src="js/common.js"></script>
-		<script>
-			const login = document.querySelector('#login');
+	</div>
 
-			// MessageBox(ALERT, "4");
-			login.addEventListener('click', async () => {
-				// await setPrice( parseFloat( document.querySelector('#account').value ) ); // Call Go function
-				let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector('#password').value );
-				// console.log(r);
-				if ( r == "ok" ){
-					window.location.href='menu.html';
-				}else {
-					MessageBox(ALERT,r);
-				}
-			});
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-dialog.min.js"></script>
+	<script src="common.js"></script>
+	<script>
+		const login = document.querySelector('#login');
 
-			
-		</script>
-	</body>
+		login.addEventListener('click', async () => {
+			let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector(
+				'#password').value);
+			// console.log(r);
+			if (r == "ok") {
+				window.location.href = 'menu.html';
+			} else {
+				BootstrapDialog.alert(r);
+			}
+		});
+	</script>
+</body>
+
 </html>

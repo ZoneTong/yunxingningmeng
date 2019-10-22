@@ -1,0 +1,23 @@
+		* {
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		    user-select: none;
+		}
+
+		body {
+			height: 100vh;
+			/* width: 100vh; */
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    background-color: #dff0d8;
+		    font-family: 'Helvetika Neue', Arial, sans-serif;
+		    font-size: 28px;
+		}
+
+		.mtop5,
+		.col-xs-12 input,
+		.col-xs-12 button {
+			margin-top: 5px
+		}

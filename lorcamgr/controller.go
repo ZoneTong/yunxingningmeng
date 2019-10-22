@@ -75,6 +75,7 @@ func SearchPurchaseRecords(column int, key string) (resp *Response) {
 func DelPurchaseRecord(id int) string {
 	r := PurchaseRecord{Id: id}
 	_, err := db.Delete(&r)
+	defer log.Println("DelPurchaseRecord", id, err)
 	if err != nil {
 		return err.Error()
 	}
