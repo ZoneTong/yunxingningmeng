@@ -25,12 +25,24 @@
             <div class="row" id="toolbar">
                 <div class="col-xs-2 ">
                     <div>
+                        <button class="btn btn-info form-control" type="button" onclick="calcFinance(0);">
+                            <i class="glyphicon glyphicon-plus"></i>统计今日</button>
+                    </div>
+                </div>
+                <div class="col-xs-2" >
+                    <div>
+                        <button class="btn btn-info form-control" type="button" onclick="calcFinance(1);">
+                            <i class="glyphicon glyphicon-pencil"></i>统计昨日</button>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div>
                         <button class="btn btn-info form-control" type="button" data-toggle="modal"
-                            data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>新建</button>
+                            data-target="#myModal"><i class="glyphicon glyphicon-refresh"></i>统计往期</button>
                     </div>
                 </div>
 
-                <div class="col-xs-10 mtop5">
+                <div class="col-xs-6 mtop5">
                     <div class="input-group">
                         <div class="input-group-btn ">
                             <select class="form-control" style="
@@ -62,55 +74,36 @@
                     <tr>
                         <!-- <th data-sortable="true" data-align="center" data-field="Id">序号</th> -->
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-field="Specifications">规格</th>
-                        <th data-sortable="true" data-align="center" data-field="Operation">库存操作</th>
-                        <th data-sortable="true" data-align="center" data-field="Weight">重量(斤)</th>
-                        <th data-sortable="true" data-align="center" data-field="Money">金额(元)</th>
-                        <th data-sortable="true" data-align="center" data-field="SurplusStock">剩余库存(斤)</th>
-                        <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+                        <th data-sortable="true" data-align="center" data-field="Purchase">日采购</th>
+                        <th data-sortable="true" data-align="center" data-field="Sale">日销售</th>
+                        <th data-sortable="true" data-align="center" data-field="Cost">日费用</th>
+                        <th data-sortable="true" data-align="center" data-field="LastBalance">上日结余</th>
+                        <th data-sortable="true" data-align="center" data-field="Total">金额</th>
                     </tr>
                 </thead>
             </table>
             <!-- </div> -->
         </div>
         <span id="titleInfo" class="hidden">财务统计信息</span>
-
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog  modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">财务统计信息</h4>
+                        <h4 class="modal-title" id="exampleModalLabel">统计往期财务</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="myModalForm">
-                            <div class="hidden form-group"><input type="number" id="edit_status" name="edit_status"
-                                    readonly value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
+                            <div class="hidden form-group"><input type="number" id="edit_status" name="edit_status" readonly
+                                    value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
                             <div class="form-group">
-                                <label for="Date" class="col-sm-3 control-label">日期</label>
-                                <div class="col-sm-3"><input class="form-control" id="Date" name="Date" type="date"
-                                        required /></div>
-                                <label for="Specifications" class="col-sm-3 control-label">规格</label>
-                                <div class="col-sm-3"><input class="form-control" id="Specifications"
-                                        name="Specifications" type="text" /></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Operation" class="col-sm-3 control-label">库存操作</label>
-                                <div class="col-sm-3"><input class="form-control" id="Operation" name="Operation"
-                                        type="text" required />
+                                <label for="from" class="col-sm-3 control-label">起始日期</label>
+                                <div class="col-sm-3"><input class="form-control" id="from" name="from" type="date" required />
                                 </div>
-                                <label for="Weight" class="col-sm-3 control-label">重量(斤)</label>
-                                <div class="col-sm-3"><input class="form-control" id="Weight" name="Weight"
-                                        type="number" step="0.50" required /></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Money" class="col-sm-3 control-label">金额(元)</label>
-                                <div class="col-sm-3"><input class="form-control" id="Money" name="Money"
-                                    type="number" step="0.50" required /></div>
-                                <label for="SurplusStock" class="col-sm-3 control-label">剩余库存(斤)</label>
-                                <div class="col-sm-3"><input class="form-control" id="SurplusStock" name="SurplusStock"
-                                        type="number" step="0.50" /></div>
+                                <label for="to"   class="col-sm-3 control-label">结束日期</label>
+                                <div class="col-sm-3"><input class="form-control" id="to" name="to" type="date" required />
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -121,23 +114,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="messageboxModal" tabindex="-1" role="dialog" aria-labelledby="messageboxLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="messageboxLabel" style="color: red;">警告</h4>
-                    </div>
-                    <div class="modal-body">
-                        <label id="messageboxText" class="control-label">message1</label>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <script src="js/jquery.min.js"></script>
@@ -157,11 +134,11 @@
                     'edit_status': 1,
                     Id: 3,
                     Date: '20021223',
-                    'Specifications': '大件',
-                    'Operation': '卖出',
-                    'Weight': 1.7,
-                    'Money': 34.6,
-                    'SurplusStock': 91.6
+                    'Purchase': 1.4,
+                    'Sale': 3.5,
+                    'Cost': 2.6,
+                    'LastBalance': 34.6,
+                    'Total': 91.6
                 }]
             }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
                 row.edit_status = 0;
@@ -170,25 +147,10 @@
                 $('#myModal').modal();
             });
             refreshData();
-
-            fillModal();
-            $('form').bootstrapValidator({
-                message: '请输入合法值',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    Money: {
-                        validators: {
-                            notEmpty: {
-                                message: '不能为空'
-                            },
-                        }
-                    },
-                }
-            });
+            
+            let today = new Date();
+            $('#myModal #from').val( today.addDay(-10).toDateInputValue() );
+            $('#myModal #to').val( today.addDay(-1).toDateInputValue() );
         });
 
         // 表格
@@ -197,7 +159,7 @@
             searchKey: ''
         };
         const refreshData = async () => {
-            let r = await window.searchStockRecords(condition.searchArea, condition.searchKey);
+            let r = await window.searchFinanceStaticss(condition.searchArea, condition.searchKey);
             // console.log(r);
             if (r.Error && r.Error != '') {
                 BootstrapDialog.alert(r.Error);
@@ -207,42 +169,6 @@
                 e.Total = floatRound(e.Total);
                 })
                 $('#myTable').bootstrapTable('load', r.Data);
-            }
-        };
-
-        function operateFormatter(value, row, index) {
-            return [
-                '<a class="edit" href="javascript:void(0)" title="编辑">',
-                '<i class="glyphicon glyphicon-pencil"></i>',
-                '</a>  ',
-                '<a class="delete" href="javascript:void(0)" title="删除">',
-                '<i class="glyphicon glyphicon-trash"></i>',
-                '</a>'
-            ].join('')
-        }
-
-        window.operateEvents = {
-            'click .edit': function (e, value, row, index) {
-                row.edit_status = 1;
-                fillModal(row);
-                $('#myModal').modal();
-            },
-            'click .delete': function (e, value, row, index) {
-                BootstrapDialog.confirm("确定删除记录?",async (result) => {
-                    if (!result) {
-                        return
-                    }
-                    let r = await window.delStockRecord(row.Id)
-                    if (r == "ok") {
-                        $('#myTable').bootstrapTable('remove', {
-                            field: 'Id',
-                            values: [row.Id]
-                        })
-                    } else {
-                        BootstrapDialog.alert(r)
-                        return
-                    }                
-                });
             }
         };
 
@@ -268,39 +194,19 @@
         }
         $('#searchKey').change(search);
 
+        const calcFinance = async(daydiff) => {
+            let date = new Date();
+            date = date.addDay(daydiff);
+            let r = await window.calcFinanceByPeriod(toDBDate(date), toDBDate(date));
+            if ( r == 'ok' ){
+                search();
+            } else {
+                BootstrapDialog.alert(r);
+            }
+        }
+
         // 弹窗
         function fillModal(r) {
-            var now = new Date();
-            var record = {
-                edit_status: 0,
-                Id: 0,
-                Date: toDBDate(now),
-                Specifications: '',
-                Operation: '',
-                Weight: 0,
-                Money: 0,
-                SurplusStock: 0,
-            };
-            $.extend(record, r);
-
-            if (record.Id != 0) {
-                if (record.edit_status == 1) {
-                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id + ' - 编辑');
-                } else {
-                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id);
-                }
-            }
-            $('#myModal #edit_status').val(record.edit_status);
-            $('#myModal #Id').val(record.Id);
-            let d = parseDateString(record.Date).toDateInputValue();
-            $('#myModal #Date').val(d);
-            $('#myModal #Customer').val(record.Customer);
-            $('#myModal #Logistics').val(record.Logistics);
-            $('#myModal #Specifications').val(record.Specifications);
-            $('#myModal #Operation').val(record.Operation);
-            $('#myModal #Weight').val(record.Weight);
-            $('#myModal #Money').val(record.Money);
-            $('#myModal #SurplusStock').val(record.SurplusStock);
         }
 
         $('#myModal').on('shown.bs.modal', function () {
@@ -308,33 +214,21 @@
         }).on('hide.bs.modal', function () {
             fillModal();
             $('#myModal #exampleModalLabel').html($('#titleInfo').text());
-            $('form#myModalForm').data('bootstrapValidator').resetForm();
             $('#myModal #submitBtn').show();
         });
 
         async function submitModal() {
             let myform = $('form#myModalForm')
-            let bv = myform.data('bootstrapValidator');
-            //手动触发验证
-            bv.validate();
-            var flag = bv.isValid();
-            if (!flag) {
-                return;
-            }
-
             var record = {};
             var t = myform.serializeArray();
             $.each(t, function () {
                 record[this.name] = this.value;
             });
 
-            // console.log(record)                
-            record.Id = parseInt(record.Id)
-            record.Date = toDBDate(new Date(record.Date));
-            record.Weight = parseFloat(record.Weight);
-            record.Money = parseFloat(record.Money);
-            record.SurplusStock = parseFloat(record.SurplusStock);
-            let r = await window.newOrEditStockRecord(record);
+            // console.log(record)           
+            record.from = toDBDate(record.from);
+            record.to = toDBDate(record.to);
+            let r = await window.calcFinanceByPeriod(record.from, record.to);
             if (r == "ok") {
                 search();
                 $('#myModal').modal('hide');

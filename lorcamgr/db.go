@@ -15,7 +15,7 @@ func init() {
 	// orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", "data.db")
 	// orm.ResetModelCache()
-	orm.RegisterModelWithPrefix("t_", new(User), new(PurchaseRecord), new(SaleRecord), new(CostRecord), new(StockRecord))
+	orm.RegisterModelWithPrefix("t_", new(User), new(PurchaseRecord), new(SaleRecord), new(CostRecord), new(StockRecord), new(FinanceStatics))
 
 	db = orm.NewOrm()
 

@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"log"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 func verifyPassword(account, password string) string {
@@ -235,10 +237,18 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 	log.Println("NewOrEditFinanceStatics", *r)
 	var err error
 	r.Total = r.CalcTotal()
-	_, err = db.InsertOrUpdate(r, "Date")
+
+	old := FinanceStatics{Date: r.Date}
+	_, _, err = db.ReadOrCreate(&old, "Date")
 	if err != nil {
 		return err.Error()
 	}
+
+	_, err = db.Update(r, "Date")
+	if err != nil {
+		return err.Error()
+	}
+
 	return "ok"
 }
 
@@ -267,7 +277,7 @@ func SearchFinanceStaticss(column int, key string) (resp *Response) {
 }
 
 func CalcFinanceByDate(date string) string {
-	var r FinanceStatics
+	r := FinanceStatics{Date: date}
 	var resp *Response
 	resp = SearchPurchaseRecords(SEARCH_DATE, date)
 	for _, row := range resp.Data.([]*PurchaseRecord) {
@@ -291,7 +301,8 @@ func CalcFinanceByDate(date string) string {
 
 	var pre_f = FinanceStatics{Date: predate}
 	err = db.Read(&pre_f, "Date")
-	if err != nil {
+	// log.Println("FinanceStatics Read", err)
+	if err != nil && err != orm.ErrNoRows {
 		return err.Error()
 	}
 	r.LastBalance = pre_f.Total
@@ -313,7 +324,7 @@ func nextNDate(date string, n int) (nd string, err error) {
 
 func CalcFinanceByPeriod(from, to string) (errstr string) {
 	errstr = "ok"
-	today := time.Now().Format(DATE_FORMAT)
+	today := time.Now().Local().Format(DATE_FORMAT)
 	var date = from
 	var err error
 	for date <= today && date <= to {

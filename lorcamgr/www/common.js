@@ -22,8 +22,20 @@ Date.prototype.toDateInputValue = (function () {
 		return;
 	}
 
-	local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+	local.setTime(this.getTime() - this.getTimezoneOffset()*60000);
 	return local.toJSON().slice(0, 10);
+});
+
+Date.prototype.addDay = (function (n) {
+	let local = new Date(this);
+	if (!(local instanceof Date) || isNaN(local.getTime())) {
+		return;
+	}
+	
+	 let ms = local.getTime()
+	 ms += n * 24 * 60 * 60 * 1000
+	 local.setTime(ms)
+	 return local;
 });
 
 function toDBDate(d ){

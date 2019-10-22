@@ -75,7 +75,7 @@ NEWUI:
 	ui.Bind("newOrEditStockRecord", NewOrEditStockRecord)
 	ui.Bind("delStockRecord", DelStockRecord)
 
-	ui.Bind("calcFinanceByDate", CalcFinanceByDate)
+	ui.Bind("calcFinanceByPeriod", CalcFinanceByPeriod)
 	ui.Bind("searchFinanceStaticss", SearchFinanceStaticss)
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
