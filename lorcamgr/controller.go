@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"time"
 )
 
 func verifyPassword(account, password string) string {
@@ -178,4 +179,155 @@ func DelCostRecord(id int) string {
 		return err.Error()
 	}
 	return "ok"
+}
+
+func NewOrEditStockRecord(r *StockRecord) string {
+	log.Println("NewOrEditStockRecord", *r)
+	var err error
+	// r.Total = r.CalcTotal()
+	if r.Id == 0 {
+		_, err = db.Insert(r)
+	} else {
+		_, err = db.Update(r)
+	}
+
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func SearchStockRecords(column int, key string) (resp *Response) {
+	resp = new(Response)
+	table := db.QueryTable(&StockRecord{})
+
+	if column == SEARCH_DATE {
+		table = table.Filter("date__icontains", key)
+	} else {
+		table = table.Filter("customer__icontains", key)
+	}
+
+	var rows []*StockRecord
+	n, err := table.All(&rows)
+	if err != nil {
+		resp.Error = err.Error()
+		return
+	}
+	log.Println("SearchStockRecords Total count:", n)
+	if n > 0 {
+		log.Println("SearchStockRecords first:", rows[0])
+	}
+	resp.Data = rows
+	return
+}
+
+func DelStockRecord(id int) string {
+	r := StockRecord{Id: id}
+	_, err := db.Delete(&r)
+	defer log.Println("DelStockRecord", id, err)
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func newOrEditFinanceStatics(r *FinanceStatics) string {
+	log.Println("NewOrEditFinanceStatics", *r)
+	var err error
+	r.Total = r.CalcTotal()
+	_, err = db.InsertOrUpdate(r, "Date")
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func SearchFinanceStaticss(column int, key string) (resp *Response) {
+	resp = new(Response)
+	table := db.QueryTable(&FinanceStatics{})
+
+	if column == SEARCH_DATE {
+		table = table.Filter("date__icontains", key)
+	} else {
+		table = table.Filter("customer__icontains", key)
+	}
+
+	var rows []*FinanceStatics
+	n, err := table.All(&rows)
+	if err != nil {
+		resp.Error = err.Error()
+		return
+	}
+	log.Println("SearchFinanceStaticss Total count:", n)
+	if n > 0 {
+		log.Println("SearchFinanceStaticss first:", rows[0])
+	}
+	resp.Data = rows
+	return
+}
+
+func CalcFinanceByDate(date string) string {
+	var r FinanceStatics
+	var resp *Response
+	resp = SearchPurchaseRecords(SEARCH_DATE, date)
+	for _, row := range resp.Data.([]*PurchaseRecord) {
+		r.Purchase += row.Total
+	}
+
+	resp = SearchSaleRecords(SEARCH_DATE, date)
+	for _, row := range resp.Data.([]*SaleRecord) {
+		r.Sale += row.Total
+	}
+
+	resp = SearchCostRecords(SEARCH_DATE, date)
+	for _, row := range resp.Data.([]*CostRecord) {
+		r.Cost += row.Total
+	}
+
+	predate, err := nextNDate(date, -1)
+	if err != nil {
+		return err.Error()
+	}
+
+	var pre_f = FinanceStatics{Date: predate}
+	err = db.Read(&pre_f, "Date")
+	if err != nil {
+		return err.Error()
+	}
+	r.LastBalance = pre_f.Total
+
+	return newOrEditFinanceStatics(&r)
+}
+
+const (
+	DATE_FORMAT = "20060102"
+)
+
+func nextNDate(date string, n int) (nd string, err error) {
+	t, err := time.Parse(DATE_FORMAT, date)
+	if err != nil {
+		return "", err
+	}
+	return t.AddDate(0, 0, n).Format(DATE_FORMAT), nil
+}
+
+func CalcFinanceByPeriod(from, to string) (errstr string) {
+	errstr = "ok"
+	today := time.Now().Format(DATE_FORMAT)
+	var date = from
+	var err error
+	for date <= today && date <= to {
+		errstr = CalcFinanceByDate(date)
+		if errstr != "ok" {
+			break
+		}
+
+		date, err = nextNDate(date, 1)
+		if err != nil {
+			errstr = err.Error()
+			break
+		}
+	}
+
+	return
 }

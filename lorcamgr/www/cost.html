@@ -45,7 +45,6 @@
                                 -webkit-appearance:none;
                                 " id="searchArea">
                                 <option value=0>日期</option>
-                                <option value=2>客户</option>
                             </select>
                         </div>
                         <input class="form-control" type="text" placeholder="日期" id="searchKey" />
@@ -57,7 +56,8 @@
                 </div>
             </div>
             
-            <table id="myTable" class="mtop5">
+            <table id="myTable" class="mtop5" data-show-multi-sort="true"
+                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]' >
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>

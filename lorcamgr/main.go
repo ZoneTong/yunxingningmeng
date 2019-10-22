@@ -51,6 +51,14 @@ NEWUI:
 		ui.SetBounds(bd)
 	})
 
+	ui.Bind("tableUI2", func() {
+		curUI = tableUI
+		bd, _ := ui.Bounds()
+		bd.Width = 1120
+		bd.Height = 800
+		ui.SetBounds(bd)
+	})
+
 	ui.Bind("verifyPassword", verifyPassword)
 	ui.Bind("searchPurchaseRecords", SearchPurchaseRecords)
 	ui.Bind("newOrEditPurchaseRecord", NewOrEditPurchaseRecord)
@@ -62,6 +70,13 @@ NEWUI:
 	ui.Bind("searchCostRecords", SearchCostRecords)
 	ui.Bind("newOrEditCostRecord", NewOrEditCostRecord)
 	ui.Bind("delCostRecord", DelCostRecord)
+
+	ui.Bind("searchStockRecords", SearchStockRecords)
+	ui.Bind("newOrEditStockRecord", NewOrEditStockRecord)
+	ui.Bind("delStockRecord", DelStockRecord)
+
+	ui.Bind("calcFinanceByDate", CalcFinanceByDate)
+	ui.Bind("searchFinanceStaticss", SearchFinanceStaticss)
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
 	// e.g: ui.Load("data:text/html," + url.PathEscape(html))
