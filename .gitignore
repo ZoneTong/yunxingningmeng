@@ -2,4 +2,4 @@ lorcamgr/lorcamgr
 */tmp.*
 */*tmp
 */*.DS_Store
-*/data.db
+lorcamgr/data.db

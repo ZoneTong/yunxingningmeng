@@ -32,3 +32,12 @@ function toDBDate(d ){
 	let day = d.getDate(); //获取当前日(1-31)
 	return ""+year+month+day;
 }
+
+// 解决浮点数精度问题
+function _roundFloat(number, precision) {
+	return Math.round(+number + 'e' + precision) / Math.pow(10, precision);
+}
+
+function floatRound(number) {
+	return _roundFloat(number, 3)
+}

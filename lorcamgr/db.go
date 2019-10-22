@@ -80,9 +80,10 @@ type CostRecord struct {
 	// Record
 	Id   int `orm:"pk;auto;null"`
 	Date string
-	string
-	TeaCost, LaborCost, Freight, Postage, CartonCost, Consumables, PackingCharges float64
-	Total                                                                         float64
+
+	TeaCost, LaborCost, Freight, Postage, CartonCost float64
+	Consumables, PackingCharges                      float64
+	Total                                            float64
 
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`

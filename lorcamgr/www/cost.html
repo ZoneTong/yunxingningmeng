@@ -2,7 +2,7 @@
 <html lang="zh">
 
 <head>
-    <title>运兴合作社管理软件-货物采购</title>
+    <title>运兴合作社管理软件-运营成本</title>
     <link rel="shortcut icon" href="ningmeng.ico">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,7 +45,7 @@
                                 -webkit-appearance:none;
                                 " id="searchArea">
                                 <option value=0>日期</option>
-                                <option value=1>供应商</option>
+                                <option value=2>客户</option>
                             </select>
                         </div>
                         <input class="form-control" type="text" placeholder="日期" id="searchKey" />
@@ -62,19 +62,21 @@
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-field="Provider">供应商名称</th>
-                        <th data-sortable="true" data-align="center" data-field="Logistics">物流名称</th>
-                        <th data-sortable="true" data-align="center" data-field="Specifications">规格</th>
-                        <th data-sortable="true" data-align="center" data-field="Number">件数</th>
-                        <th data-sortable="true" data-align="center" data-field="Weight">净重(斤)</th>
-                        <th data-sortable="true" data-align="center" data-field="Price">单价(元/斤)</th>
+                        <th data-sortable="true" data-align="center" data-field="TeaCost">茶餐费</th>
+                        <th data-sortable="true" data-align="center" data-field="LaborCost">人工费</th>
+                        <th data-sortable="true" data-align="center" data-field="Freight">运费</th>
+                        <th data-sortable="true" data-align="center" data-field="Postage">邮费</th>
+                        <th data-sortable="true" data-align="center" data-field="CartonCost">纸箱</th>
+                        <th data-sortable="true" data-align="center" data-field="Consumables">小材</th>
+                        <th data-sortable="true" data-align="center" data-field="PackingCharges">包装材料费</th>
                         <th data-sortable="true" data-align="center" data-field="Total">合计(元)</th>
                         <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
                     </tr>
                 </thead>
             </table>
+            <!-- </div> -->
         </div>
-        <span id="titleInfo" class="hidden">货物信息</span>
+        <span id="titleInfo" class="hidden">运营成本</span>
 
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog  modal-lg" role="document">
@@ -82,7 +84,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">货物信息</h4>
+                        <h4 class="modal-title" id="exampleModalLabel">运营成本</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="myModalForm">
@@ -92,36 +94,36 @@
                                 <label for="Date" class="col-sm-3 control-label">日期</label>
                                 <div class="col-sm-3"><input class="form-control" id="Date" name="Date" type="date"
                                         required /></div>
-                                <label for="Provider" class="col-sm-3 control-label">供应商名称</label>
-                                <div class="col-sm-3"><input class="form-control" id="Provider" name="Provider"
-                                        type="text" required />
+                                <label for="TeaCost" class="col-sm-3 control-label">茶餐费</label>
+                                <div class="col-sm-3"><input class="form-control" id="TeaCost" name="TeaCost"
+                                        type="number" step="0.50" required />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="Logistics" class="col-sm-3 control-label">物流名称</label>
-                                <div class="col-sm-3"><input class="form-control" id="Logistics" name="Logistics"
-                                        type="text" required />
+                                <label for="LaborCost" class="col-sm-3 control-label">人工费</label>
+                                <div class="col-sm-3"><input class="form-control" id="LaborCost" name="LaborCost"
+                                        type="number" step="0.50" required />
                                 </div>
-                                <label for="Specifications" class="col-sm-3 control-label">规格</label>
-                                <div class="col-sm-3"><input class="form-control" id="Specifications"
-                                        name="Specifications" type="text" /></div>
+                                <label for="Freight" class="col-sm-3 control-label">运费</label>
+                                <div class="col-sm-3"><input class="form-control" id="Freight" name="Freight" 
+                                    type="number" step="0.50" /></div>
                             </div>
                             <div class="form-group">
-                                <label for="Number" class="col-sm-3 control-label">件数</label>
-                                <div class="col-sm-3"><input class="form-control" id="Number" name="Number"
-                                        type="number" required />
+                                <label for="Postage" class="col-sm-3 control-label">邮费</label>
+                                <div class="col-sm-3"><input class="form-control" id="Postage" name="Postage"
+                                        type="number" step="0.50" required />
                                 </div>
-                                <label for="Weight" class="col-sm-3 control-label">净重(斤)</label>
-                                <div class="col-sm-3"><input class="form-control" id="Weight" name="Weight"
+                                <label for="CartonCost" class="col-sm-3 control-label">纸箱</label>
+                                <div class="col-sm-3"><input class="form-control" id="CartonCost" name="CartonCost"
                                         type="number" step="0.50" required /></div>
                             </div>
                             <div class="form-group">
-                                <label for="Price" class="col-sm-3 control-label">单价(元/斤)</label>
-                                <div class="col-sm-3"><input class="form-control" id="Price" name="Price" type="number"
-                                        step="0.50" required /></div>
-                                <!-- <label for="Total" class="col-sm-3 control-label">合计(元)</label>
-                                <div class="col-sm-3"><input class="form-control" id="Total" type="number" readonly
-                                        step="0.50" /></div> -->
+                                <label for="Consumables" class="col-sm-3 control-label">小材</label>
+                                <div class="col-sm-3"><input class="form-control" id="Consumables" name="Consumables" 
+                                    type="number" step="0.50" required /></div>
+                                <label for="PackingCharges" class="col-sm-3 control-label">包装材料费</label>
+                                <div class="col-sm-3"><input class="form-control" id="PackingCharges" name="PackingCharges"
+                                     type="number" required step="0.50" /></div>
                             </div>
                         </form>
                     </div>
@@ -168,12 +170,13 @@
                     'edit_status': 1,
                     Id: 3,
                     Date: '20021223',
-                    'Provider': '淘宝',
-                    'Logistics': '菜鸟',
-                    'Specifications': '大件',
-                    'Number': 9,
-                    'Weight': 1.7,
-                    'Price': 34.6,
+                    'TeaCost': 1.2,
+                    'LaborCost': 3.4,
+                    'Freight': 5.3,
+                    'Postage': 9.1,
+                    'CartonCost': 1.5,
+                    'Consumables': 34.6,
+                    'PackingCharges': 4444440.7,
                     'Total': 91.6
                 }]
             }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
@@ -193,7 +196,7 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    Price: {
+                    Consumables: {
                         validators: {
                             notEmpty: {
                                 message: '不能为空'
@@ -210,14 +213,14 @@
             searchKey: ''
         };
         const refreshData = async () => {
-            let r = await window.searchPurchaseRecords(condition.searchArea, condition.searchKey);
+            let r = await window.searchCostRecords(condition.searchArea, condition.searchKey);
             // console.log(r);
             if (r.Error && r.Error != '') {
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
                 $.each(r.Data, function (i, e) {
-                e.Total = floatRound(e.Total);
+                    e.Total = floatRound(e.Total);
                 })
                 $('#myTable').bootstrapTable('load', r.Data);
             }
@@ -245,7 +248,7 @@
                     if (!result) {
                         return
                     }
-                    let r = await window.delPurchaseRecord(row.Id)
+                    let r = await window.delCostRecord(row.Id)
                     if (r == "ok") {
                         $('#myTable').bootstrapTable('remove', {
                             field: 'Id',
@@ -288,12 +291,13 @@
                 edit_status: 0,
                 Id: 0,
                 Date: toDBDate(now),
-                Provider: '',
-                Logistics: '',
-                Specifications: '',
-                Number: 0,
-                Weight: 0,
-                Price: 0,
+                TeaCost: 0,
+                LaborCost: 0,
+                Freight: 0,
+                Postage: 0,
+                CartonCost: 0,
+                Consumables: 0,
+                PackingCharges: 0,
                 Total: 0,
             };
             $.extend(record, r);
@@ -309,13 +313,13 @@
             $('#myModal #Id').val(record.Id);
             let d = parseDateString(record.Date).toDateInputValue();
             $('#myModal #Date').val(d);
-            $('#myModal #Provider').val(record.Provider);
-            $('#myModal #Logistics').val(record.Logistics);
-            $('#myModal #Specifications').val(record.Specifications);
-            $('#myModal #Number').val(record.Number);
-            $('#myModal #Weight').val(record.Weight);
-            $('#myModal #Price').val(record.Price);
-            $('#myModal #Total').val(record.Total);
+            $('#myModal #TeaCost').val(record.TeaCost);
+            $('#myModal #LaborCost').val(record.LaborCost);
+            $('#myModal #Freight').val(record.Freight);
+            $('#myModal #Postage').val(record.Postage);
+            $('#myModal #CartonCost').val(record.CartonCost);
+            $('#myModal #Consumables').val(record.Consumables);
+            $('#myModal #PackingCharges').val(record.PackingCharges);
         }
 
         $('#myModal').on('shown.bs.modal', function () {
@@ -346,10 +350,14 @@
             // console.log(record)                
             record.Id = parseInt(record.Id)
             record.Date = toDBDate(new Date(record.Date));
-            record.Number = parseInt(record.Number)
-            record.Weight = parseFloat(record.Weight);
-            record.Price = parseFloat(record.Price);
-            let r = await window.newOrEditPurchaseRecord(record);
+            record.TeaCost=parseFloat(record.TeaCost);
+            record.LaborCost=parseFloat(record.LaborCost);
+            record.Freight=parseFloat(record.Freight);
+            record.Postage = parseFloat(record.Postage);
+            record.CartonCost = parseFloat(record.CartonCost);
+            record.Consumables = parseFloat(record.Consumables);
+            record.PackingCharges = parseFloat(record.PackingCharges);
+            let r = await window.newOrEditCostRecord(record);
             if (r == "ok") {
                 search();
                 $('#myModal').modal('hide');

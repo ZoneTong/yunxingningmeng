@@ -217,6 +217,9 @@
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
+                $.each(r.Data, function (i, e) {
+                e.Total = floatRound(e.Total);
+                })
                 $('#myTable').bootstrapTable('load', r.Data);
             }
         };
@@ -278,14 +281,6 @@
             refreshData();
         }
         $('#searchKey').change(search);
-
-        function responseHandler(res) {
-            $.each(res.rows, function (i, row) {
-                row.state = $.inArray(row.id, selections) !== -1
-            })
-            return res
-        }
-
 
         // 弹窗
         function fillModal(r) {

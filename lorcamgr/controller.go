@@ -41,22 +41,6 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 	return "ok"
 }
 
-func NewOrEditSaleRecord(r *SaleRecord) string {
-	log.Println("NewOrEditSaleRecord", *r)
-	var err error
-	r.Total = r.CalcTotal()
-	if r.Id == 0 {
-		_, err = db.Insert(r)
-	} else {
-		_, err = db.Update(r)
-	}
-
-	if err != nil {
-		return err.Error()
-	}
-	return "ok"
-}
-
 const (
 	SEARCH_DATE = iota
 	SEARCH_PROVIDER
@@ -89,6 +73,32 @@ func SearchPurchaseRecords(column int, key string) (resp *Response) {
 	return
 }
 
+func DelPurchaseRecord(id int) string {
+	r := PurchaseRecord{Id: id}
+	_, err := db.Delete(&r)
+	defer log.Println("DelPurchaseRecord", id, err)
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func NewOrEditSaleRecord(r *SaleRecord) string {
+	log.Println("NewOrEditSaleRecord", *r)
+	var err error
+	r.Total = r.CalcTotal()
+	if r.Id == 0 {
+		_, err = db.Insert(r)
+	} else {
+		_, err = db.Update(r)
+	}
+
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
 func SearchSaleRecords(column int, key string) (resp *Response) {
 	resp = new(Response)
 	table := db.QueryTable(&SaleRecord{})
@@ -110,20 +120,60 @@ func SearchSaleRecords(column int, key string) (resp *Response) {
 	return
 }
 
-func DelPurchaseRecord(id int) string {
-	r := PurchaseRecord{Id: id}
+func DelSaleRecord(id int) string {
+	r := SaleRecord{Id: id}
 	_, err := db.Delete(&r)
-	defer log.Println("DelPurchaseRecord", id, err)
+	defer log.Println("DelSaleRecord", id, err)
 	if err != nil {
 		return err.Error()
 	}
 	return "ok"
 }
 
-func DelSaleRecord(id int) string {
-	r := SaleRecord{Id: id}
+func NewOrEditCostRecord(r *CostRecord) string {
+	log.Println("NewOrEditCostRecord", *r)
+	var err error
+	r.Total = r.CalcTotal()
+	if r.Id == 0 {
+		_, err = db.Insert(r)
+	} else {
+		_, err = db.Update(r)
+	}
+
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func SearchCostRecords(column int, key string) (resp *Response) {
+	resp = new(Response)
+	table := db.QueryTable(&CostRecord{})
+
+	if column == SEARCH_DATE {
+		table = table.Filter("date__icontains", key)
+	} else {
+		table = table.Filter("customer__icontains", key)
+	}
+
+	var rows []*CostRecord
+	n, err := table.All(&rows)
+	if err != nil {
+		resp.Error = err.Error()
+		return
+	}
+	log.Println("SearchCostRecords Total count:", n)
+	if n > 0 {
+		log.Println("SearchCostRecords first:", rows[0])
+	}
+	resp.Data = rows
+	return
+}
+
+func DelCostRecord(id int) string {
+	r := CostRecord{Id: id}
 	_, err := db.Delete(&r)
-	defer log.Println("DelSaleRecord", id, err)
+	defer log.Println("DelCostRecord", id, err)
 	if err != nil {
 		return err.Error()
 	}

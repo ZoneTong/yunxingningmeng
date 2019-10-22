@@ -59,6 +59,9 @@ NEWUI:
 	ui.Bind("newOrEditSaleRecord", NewOrEditSaleRecord)
 	ui.Bind("delSaleRecord", DelSaleRecord)
 
+	ui.Bind("searchCostRecords", SearchCostRecords)
+	ui.Bind("newOrEditCostRecord", NewOrEditCostRecord)
+	ui.Bind("delCostRecord", DelCostRecord)
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
 	// e.g: ui.Load("data:text/html," + url.PathEscape(html))
