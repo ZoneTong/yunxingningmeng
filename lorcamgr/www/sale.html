@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <title>运兴合作社管理软件-货物销售</title>
+    <link rel="shortcut icon" href="ningmeng.ico">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-table.min.css" rel="stylesheet">
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
+    <link href="common.css" rel="stylesheet">
+    <style>
+        body{
+            align-items:inherit
+        }
+    </style>
+</head>
+
+<body onload="tableUI()">
+    <div class="container-fluid">
+        <div class="form-group main_ui">
+            <div class="row" id="toolbar">
+                <div class="col-xs-2 ">
+                    <div>
+                        <button class="btn btn-info form-control" type="button" data-toggle="modal"
+                            data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>新建</button>
+                    </div>
+                </div>
+
+                <div class="col-xs-10 mtop5">
+                    <div class="input-group">
+                        <div class="input-group-btn ">
+                            <select class="form-control" style="
+                                width:100px;
+                                padding:3px 10px;
+                                border-top-left-radius: 5px;
+                                border-bottom-left-radius: 5px;
+                                background: white no-repeat 90% 50%;
+                                background-size:13px 13px;
+                                appearance:none;
+                                -moz-appearance:none;
+                                -webkit-appearance:none;
+                                " id="searchArea">
+                                <option value=0>日期</option>
+                                <option value=2>客户</option>
+                            </select>
+                        </div>
+                        <input class="form-control" type="text" placeholder="日期" id="searchKey" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button" onclick="search();"><span
+                                    class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <table id="myTable" class="mtop5">
+                <thead>
+                    <tr>
+                        <th data-sortable="true" data-align="center" data-field="Id">序号</th>
+                        <th data-sortable="true" data-align="center" data-field="Date">日期</th>
+                        <th data-sortable="true" data-align="center" data-field="Customer">客户名称</th>
+                        <th data-sortable="true" data-align="center" data-field="Logistics">物流名称</th>
+                        <th data-sortable="true" data-align="center" data-field="Specifications">规格</th>
+                        <th data-sortable="true" data-align="center" data-field="Number">件数</th>
+                        <th data-sortable="true" data-align="center" data-field="Weight">净重(斤)</th>
+                        <th data-sortable="true" data-align="center" data-field="Price">单价(元/斤)</th>
+                        <th data-sortable="true" data-align="center" data-field="Total">合计(元)</th>
+                        <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+                    </tr>
+                </thead>
+            </table>
+            <!-- </div> -->
+        </div>
+        <span id="titleInfo" class="hidden">销售信息</span>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog  modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">销售信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="myModalForm">
+                            <div class="hidden form-group"><input type="number" id="edit_status" name="edit_status"
+                                    readonly value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
+                            <div class="form-group">
+                                <label for="Date" class="col-sm-3 control-label">日期</label>
+                                <div class="col-sm-3"><input class="form-control" id="Date" name="Date" type="date"
+                                        required /></div>
+                                <label for="Customer" class="col-sm-3 control-label">客户名称</label>
+                                <div class="col-sm-3"><input class="form-control" id="Customer" name="Customer"
+                                        type="text" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Logistics" class="col-sm-3 control-label">物流名称</label>
+                                <div class="col-sm-3"><input class="form-control" id="Logistics" name="Logistics"
+                                        type="text" required />
+                                </div>
+                                <label for="Specifications" class="col-sm-3 control-label">规格</label>
+                                <div class="col-sm-3"><input class="form-control" id="Specifications"
+                                        name="Specifications" type="text" /></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Number" class="col-sm-3 control-label">件数</label>
+                                <div class="col-sm-3"><input class="form-control" id="Number" name="Number"
+                                        type="number" required />
+                                </div>
+                                <label for="Weight" class="col-sm-3 control-label">净重(斤)</label>
+                                <div class="col-sm-3"><input class="form-control" id="Weight" name="Weight"
+                                        type="number" step="0.50" required /></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Price" class="col-sm-3 control-label">单价(元/斤)</label>
+                                <div class="col-sm-3"><input class="form-control" id="Price" name="Price" type="number"
+                                        step="0.50" required /></div>
+                                <!-- <label for="Total" class="col-sm-3 control-label">合计(元)</label>
+                                <div class="col-sm-3"><input class="form-control" id="Total" type="number" readonly
+                                        step="0.50" /></div> -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitModal()">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="messageboxModal" tabindex="-1" role="dialog" aria-labelledby="messageboxLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="messageboxLabel" style="color: red;">警告</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label id="messageboxText" class="control-label">message1</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrapValidator.min.js"></script>
+    <script src="js/bootstrapValidator-zh_CN.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/bootstrap-dialog.min.js"></script>
+    <script src="common.js"></script>
+    <script>
+        // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
+        ;;
+        $(document).ready(function () {
+            $('#myTable').bootstrapTable('destroy').bootstrapTable({
+                data: [{
+                    'edit_status': 1,
+                    Id: 3,
+                    Date: '20021223',
+                    'Customer': '淘宝',
+                    'Logistics': '菜鸟',
+                    'Specifications': '大件',
+                    'Number': 9,
+                    'Weight': 1.7,
+                    'Price': 34.6,
+                    'Total': 91.6
+                }]
+            }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
+                row.edit_status = 0;
+                fillModal(row);
+                $('#myModal #submitBtn').hide();
+                $('#myModal').modal();
+            });
+            refreshData();
+
+            fillModal();
+            $('form').bootstrapValidator({
+                message: '请输入合法值',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    Price: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                        }
+                    },
+                }
+            });
+        });
+
+        // 表格
+        let condition = {
+            searchArea: 0,
+            searchKey: ''
+        };
+        const refreshData = async () => {
+            let r = await window.searchSaleRecords(condition.searchArea, condition.searchKey);
+            // console.log(r);
+            if (r.Error && r.Error != '') {
+                BootstrapDialog.alert(r.Error);
+                return;
+            } else {
+                $('#myTable').bootstrapTable('load', r.Data);
+            }
+        };
+
+        function operateFormatter(value, row, index) {
+            return [
+                '<a class="edit" href="javascript:void(0)" title="编辑">',
+                '<i class="glyphicon glyphicon-pencil"></i>',
+                '</a>  ',
+                '<a class="delete" href="javascript:void(0)" title="删除">',
+                '<i class="glyphicon glyphicon-trash"></i>',
+                '</a>'
+            ].join('')
+        }
+
+        window.operateEvents = {
+            'click .edit': function (e, value, row, index) {
+                row.edit_status = 1;
+                fillModal(row);
+                $('#myModal').modal();
+            },
+            'click .delete': function (e, value, row, index) {
+                BootstrapDialog.confirm("确定删除记录?",async (result) => {
+                    if (!result) {
+                        return
+                    }
+                    let r = await window.delSaleRecord(row.Id)
+                    if (r == "ok") {
+                        $('#myTable').bootstrapTable('remove', {
+                            field: 'Id',
+                            values: [row.Id]
+                        })
+                    } else {
+                        BootstrapDialog.alert(r)
+                        return
+                    }                
+                });
+            }
+        };
+
+        $('#searchArea').change(function () {
+            // $('#searchKey').attr('placeholder', $('#searchArea').find("option:selected").text() );
+            condition.searchArea = parseInt($('#searchArea').val());
+            switch (condition.searchArea) {
+                case 0:
+                    $('#searchKey').attr('placeholder', '201910');
+                    break;
+
+                default:
+                    $('#searchKey').attr('placeholder', $('#searchArea').find("option:selected").text());
+                    break;
+            }
+
+            search();
+        })
+
+        function search() {
+            condition.searchKey = $('#searchKey').val();
+            refreshData();
+        }
+        $('#searchKey').change(search);
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.id, selections) !== -1
+            })
+            return res
+        }
+
+
+        // 弹窗
+        function fillModal(r) {
+            var now = new Date();
+            var record = {
+                edit_status: 0,
+                Id: 0,
+                Date: toDBDate(now),
+                Customer: '',
+                Logistics: '',
+                Specifications: '',
+                Number: 0,
+                Weight: 0,
+                Price: 0,
+                Total: 0,
+            };
+            $.extend(record, r);
+
+            if (record.Id != 0) {
+                if (record.edit_status == 1) {
+                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id + ' - 编辑');
+                } else {
+                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id);
+                }
+            }
+            $('#myModal #edit_status').val(record.edit_status);
+            $('#myModal #Id').val(record.Id);
+            let d = parseDateString(record.Date).toDateInputValue();
+            $('#myModal #Date').val(d);
+            $('#myModal #Customer').val(record.Customer);
+            $('#myModal #Logistics').val(record.Logistics);
+            $('#myModal #Specifications').val(record.Specifications);
+            $('#myModal #Number').val(record.Number);
+            $('#myModal #Weight').val(record.Weight);
+            $('#myModal #Price').val(record.Price);
+            $('#myModal #Total').val(record.Total);
+        }
+
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myModal #Date').trigger('focus');
+        }).on('hide.bs.modal', function () {
+            fillModal();
+            $('#myModal #exampleModalLabel').html($('#titleInfo').text());
+            $('form#myModalForm').data('bootstrapValidator').resetForm();
+            $('#myModal #submitBtn').show();
+        });
+
+        async function submitModal() {
+            let myform = $('form#myModalForm')
+            let bv = myform.data('bootstrapValidator');
+            //手动触发验证
+            bv.validate();
+            var flag = bv.isValid();
+            if (!flag) {
+                return;
+            }
+
+            var record = {};
+            var t = myform.serializeArray();
+            $.each(t, function () {
+                record[this.name] = this.value;
+            });
+
+            // console.log(record)                
+            record.Id = parseInt(record.Id)
+            record.Date = toDBDate(new Date(record.Date));
+            record.Number = parseInt(record.Number)
+            record.Weight = parseFloat(record.Weight);
+            record.Price = parseFloat(record.Price);
+            let r = await window.newOrEditSaleRecord(record);
+            if (r == "ok") {
+                search();
+                $('#myModal').modal('hide');
+            } else {
+                BootstrapDialog.alert(r);
+            }
+        }
+    </script>
+</body>
+
+</html>

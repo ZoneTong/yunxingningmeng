@@ -57,23 +57,22 @@ func (p *PurchaseRecord) CalcTotal() float64 {
 	return p.Weight * p.Price
 }
 
-func (p *PurchaseRecord) SetPrice(c float64) {
-	p.Price = c
-}
-
 type SaleRecord struct {
 	// Record
 	Id   int `orm:"pk;auto;null"`
 	Date string
 
-	Customer       string // 供应商
-	Logistics      string // 物流
-	Specifications string
-	Number         int
-	Weight, Price  float64
+	Customer             string // 客户名
+	Logistics            string // 物流
+	Specifications       string
+	Number               int
+	Weight, Price, Total float64
+
+	Created time.Time `orm:"auto_now_add"`
+	Updated time.Time `orm:"auto_now"`
 }
 
-func (p *SaleRecord) Total() float64 {
+func (p *SaleRecord) CalcTotal() float64 {
 	return p.Weight * p.Price
 }
 
@@ -83,9 +82,13 @@ type CostRecord struct {
 	Date string
 	string
 	TeaCost, LaborCost, Freight, Postage, CartonCost, Consumables, PackingCharges float64
+	Total                                                                         float64
+
+	Created time.Time `orm:"auto_now_add"`
+	Updated time.Time `orm:"auto_now"`
 }
 
-func (r *CostRecord) Total() float64 {
+func (r *CostRecord) CalcTotal() float64 {
 	return r.TeaCost + r.LaborCost + r.Freight + r.Postage + r.CartonCost + r.Consumables + r.PackingCharges
 }
 
@@ -98,6 +101,9 @@ type StockRecord struct {
 	Operation      string
 	Weight, Money  float64
 	SurplusStock   float64 // 剩余库存
+
+	Created time.Time `orm:"auto_now_add"`
+	Updated time.Time `orm:"auto_now"`
 }
 
 type FinanceStatics struct {
@@ -105,9 +111,12 @@ type FinanceStatics struct {
 	Id   int `orm:"pk;auto;null"`
 	Date string
 
-	Purchase, Sale, Cost, LastBalance float64
+	Purchase, Sale, Cost, LastBalance, Total float64
+
+	Created time.Time `orm:"auto_now_add"`
+	Updated time.Time `orm:"auto_now"`
 }
 
-func (r *FinanceStatics) Total() float64 {
+func (r *FinanceStatics) CalcTotal() float64 {
 	return r.Sale - r.Purchase - r.Cost + r.LastBalance
 }

@@ -51,12 +51,13 @@ NEWUI:
 		ui.SetBounds(bd)
 	})
 
-	// Create and bind Go object to the UI
-	// r := &PurchaseRecord{Id: 3, Date: time.Now().Format("20060102"), Weight: 3, Price: 4}
 	ui.Bind("verifyPassword", verifyPassword)
 	ui.Bind("searchPurchaseRecords", SearchPurchaseRecords)
 	ui.Bind("newOrEditPurchaseRecord", NewOrEditPurchaseRecord)
 	ui.Bind("delPurchaseRecord", DelPurchaseRecord)
+	ui.Bind("searchSaleRecords", SearchSaleRecords)
+	ui.Bind("newOrEditSaleRecord", NewOrEditSaleRecord)
+	ui.Bind("delSaleRecord", DelSaleRecord)
 
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,

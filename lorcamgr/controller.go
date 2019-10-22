@@ -41,9 +41,26 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 	return "ok"
 }
 
+func NewOrEditSaleRecord(r *SaleRecord) string {
+	log.Println("NewOrEditSaleRecord", *r)
+	var err error
+	r.Total = r.CalcTotal()
+	if r.Id == 0 {
+		_, err = db.Insert(r)
+	} else {
+		_, err = db.Update(r)
+	}
+
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
 const (
 	SEARCH_DATE = iota
 	SEARCH_PROVIDER
+	SEARCH_CUSTOMER
 )
 
 type Response struct {
@@ -72,10 +89,41 @@ func SearchPurchaseRecords(column int, key string) (resp *Response) {
 	return
 }
 
+func SearchSaleRecords(column int, key string) (resp *Response) {
+	resp = new(Response)
+	table := db.QueryTable(&SaleRecord{})
+
+	if column == SEARCH_DATE {
+		table = table.Filter("date__icontains", key)
+	} else {
+		table = table.Filter("customer__icontains", key)
+	}
+
+	var rows []*SaleRecord
+	n, err := table.All(&rows)
+	if err != nil {
+		resp.Error = err.Error()
+		return
+	}
+	log.Println("SearchSaleRecords Total count:", n)
+	resp.Data = rows
+	return
+}
+
 func DelPurchaseRecord(id int) string {
 	r := PurchaseRecord{Id: id}
 	_, err := db.Delete(&r)
 	defer log.Println("DelPurchaseRecord", id, err)
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
+}
+
+func DelSaleRecord(id int) string {
+	r := SaleRecord{Id: id}
+	_, err := db.Delete(&r)
+	defer log.Println("DelSaleRecord", id, err)
 	if err != nil {
 		return err.Error()
 	}

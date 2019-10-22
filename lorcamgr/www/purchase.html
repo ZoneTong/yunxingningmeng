@@ -56,13 +56,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="col-xs-12 mtop5"> -->
+            
             <table id="myTable" class="mtop5">
-                <!-- data-show-footer="true" -->
-                <!-- data-url="getData();"
-                data-response-handler="responseHandler"
-                data-show-footer="true"    -->
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>
@@ -78,7 +73,6 @@
                     </tr>
                 </thead>
             </table>
-            <!-- </div> -->
         </div>
         <span id="titleInfo" class="hidden">货物信息</span>
 
@@ -216,20 +210,6 @@
             searchKey: ''
         };
         const refreshData = async () => {
-            // $('#myTable').bootstrapTable('load', [{
-            //     'edit_status': 1,
-            //     Id: 3,
-            //     Date: '20021223',
-            //     'Provider': '淘宝',
-            //     'Logistics': '菜鸟',
-            //     'Specifications': '大件',
-            //     'Number': 9,
-            //     'Weight': 1.7,
-            //     'Price': 34.6,
-            //     'Total': 91.6
-            // }]);
-            // return
-
             let r = await window.searchPurchaseRecords(condition.searchArea, condition.searchKey);
             // console.log(r);
             if (r.Error && r.Error != '') {
