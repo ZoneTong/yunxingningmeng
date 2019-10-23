@@ -16,17 +16,26 @@
 <body onload="loginReady()">
 	<!-- UI layout -->
 	<div class="container ">
-		<div class="form-group">
-			<div class="col-xs-12"> <input type="text" id="account" placeholder="账号" class="form-control"
-					value="yunxing" />
+		<div class="">
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-4">
+					<input type="text" id="account" placeholder="账号" class="form-control" value="yunxing" />
+				</div>
 			</div>
-			<div class="col-xs-12"> <input type="password" id="password" placeholder="密码" class="form-control"
-					value="750588" />
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-4"><input type="password" id="password"
+						placeholder="密码" class="form-control" value="750588" />
+				</div>
 			</div>
-			<div class="col-xs-12"> <button type="submit" class="btn btn-info btn-sm btn-block" id="login">登陆</button>
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-4"><button type="submit"
+						class="btn btn-info btn-sm btn-block" id="login">登陆</button></div>
 			</div>
-			<div class="col-xs-12">
-				<div class="alert alert-warning hide form-group" role="alert" style="font-size:12px;" id="expireInfo">过期警告</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-4">
+					<div class="alert alert-warning hide form-group" role="alert" style="font-size:12px;"
+						id="expireInfo">过期警告</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -40,14 +49,14 @@
 			$('#account').trigger('focus');
 		});
 
-		$("#account").keydown(function() {
-			if (event.keyCode == "13") {//keyCode=13是回车键
+		$("#account").keydown(function () {
+			if (event.keyCode == "13") { //keyCode=13是回车键
 				$('#password').trigger('focus');
 			}
 		});
 
-		$("#password").keydown(function() {
-			if (event.keyCode == "13") {//keyCode=13是回车键
+		$("#password").keydown(function () {
+			if (event.keyCode == "13") { //keyCode=13是回车键
 				$('#login').click();
 			}
 		});

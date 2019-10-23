@@ -42,7 +42,7 @@ func main() {
 	var curUI = loginUI
 
 NEWUI:
-	ui, err := lorca.New("", "", 400, 250)
+	ui, err := lorca.New("", "", 1400, 900)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,26 +58,26 @@ NEWUI:
 
 	ui.Bind("menuUI", func() {
 		curUI = menuUI
-		bd, _ := ui.Bounds()
-		bd.Width = 400
-		bd.Height = 400
-		ui.SetBounds(bd)
+		// bd, _ := ui.Bounds()
+		// bd.Width = 400
+		// bd.Height = 400
+		// ui.SetBounds(bd)
 	})
 
 	ui.Bind("tableUI", func() {
 		curUI = tableUI
-		bd, _ := ui.Bounds()
-		bd.Width = 1400
-		bd.Height = 800
-		ui.SetBounds(bd)
+		// bd, _ := ui.Bounds()
+		// bd.Width = 1400
+		// bd.Height = 800
+		// ui.SetBounds(bd)
 	})
 
 	ui.Bind("tableUI2", func() {
 		curUI = tableUI
-		bd, _ := ui.Bounds()
-		bd.Width = 1150
-		bd.Height = 800
-		ui.SetBounds(bd)
+		// bd, _ := ui.Bounds()
+		// bd.Width = 1150
+		// bd.Height = 800
+		// ui.SetBounds(bd)
 	})
 
 	ui.Bind("verifyPassword", verifyPassword)
