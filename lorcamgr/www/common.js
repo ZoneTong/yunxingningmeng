@@ -1,13 +1,15 @@
 ;;
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = '信息';
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = '信息';
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = '重要';
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = '成功';
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = '警告';
-BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = '危险';
-BootstrapDialog.DEFAULT_TEXTS['OK'] = '确定';
-BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = '取消';
-BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = '确认';
+if (typeof BootstrapDialog != "undefined") {
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = '信息';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = '信息';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = '重要';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = '成功';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = '警告';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = '危险';
+	BootstrapDialog.DEFAULT_TEXTS['OK'] = '确定';
+	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = '取消';
+	BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = '确认';
+}
 
 function parseDateString(s ){
 	let year = parseInt(s.substr(0,4));
@@ -51,5 +53,5 @@ function _roundFloat(number, precision) {
 }
 
 function floatRound(number) {
-	return _roundFloat(number, 3)
+	return _roundFloat(number, 4)
 }

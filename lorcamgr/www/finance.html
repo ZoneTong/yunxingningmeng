@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-xs-2" >
                     <div>
-                        <button class="btn btn-info form-control" type="button" onclick="calcFinance(1);">
+                        <button class="btn btn-info form-control" type="button" onclick="calcFinance(-1);">
                             <i class="glyphicon glyphicon-pencil"></i>统计昨日</button>
                     </div>
                 </div>
@@ -68,17 +68,23 @@
                 </div>
             </div>
             
-            <table id="myTable" class="mtop5" data-show-multi-sort="true"
-                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]' >
+            <table id="myTable" class="mtop5"
+                >
+            <!-- data-show-multi-sort="true"
+                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]'  -->
                 <thead>
                     <tr>
-                        <!-- <th data-sortable="true" data-align="center" data-field="Id">序号</th> -->
+                        <th data-sortable="true" data-align="center" data-visible="false" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-field="Purchase">日采购</th>
-                        <th data-sortable="true" data-align="center" data-field="Sale">日销售</th>
-                        <th data-sortable="true" data-align="center" data-field="Cost">日费用</th>
-                        <th data-sortable="true" data-align="center" data-field="LastBalance">上日结余</th>
-                        <th data-sortable="true" data-align="center" data-field="Total">金额</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">日采购
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">日销售
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">日费用
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LastBalance">
+                            上日结余</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"   data-field="Total">金额</th>
                     </tr>
                 </thead>
             </table>
@@ -123,13 +129,14 @@
     <!-- <script src="js/bootstrapValidator-zh_CN.js"></script> -->
     <script src="js/bootstrap-table.min.js"></script>
     <script src="js/bootstrap-table-zh-CN.min.js"></script>
+    <!-- <script src="js/bootstrap-table-multiple-sort.js"></script> -->
     <script src="js/bootstrap-dialog.min.js"></script>
     <script src="common.js"></script>
     <script>
         // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
         ;;
         $(document).ready(function () {
-            $('#myTable').bootstrapTable('destroy').bootstrapTable({
+            $('#myTable').bootstrapTable({
                 data: [{
                     'edit_status': 1,
                     Id: 3,
@@ -166,7 +173,11 @@
                 return;
             } else {
                 $.each(r.Data, function (i, e) {
-                e.Total = floatRound(e.Total);
+                    e.Purchase = floatRound(e.Purchase);
+                    e.Sale = floatRound( e.Sale);
+                    e.Cost= floatRound(e.Cost);
+                    e.LastBalance = floatRound(e.LastBalance);
+                    e.Total = floatRound(e.Total);
                 })
                 $('#myTable').bootstrapTable('load', r.Data);
             }
@@ -226,8 +237,8 @@
             });
 
             // console.log(record)           
-            record.from = toDBDate(record.from);
-            record.to = toDBDate(record.to);
+            record.from = toDBDate(new Date(record.from));
+            record.to = toDBDate(new Date(record.to));
             let r = await window.calcFinanceByPeriod(record.from, record.to);
             if (r == "ok") {
                 search();

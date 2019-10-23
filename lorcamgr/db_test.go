@@ -15,11 +15,12 @@ func TestDB(t *testing.T) {
 
 	user := new(User)
 	user.Name = "yunxing"
-	user.Password = "750588"
-	// err := o.Read(user, "Name")
-	// if
-
-	t.Log(o.Insert(user))
+	err := o.Read(user, "Name")
+	if err != nil {
+		user.Name = "yunxing"
+		user.Password = "750588"
+		t.Log(o.Insert(user))
+	}
 
 	// r := new(PurchaseRecord)
 	// r.Date = "20151121"

@@ -66,19 +66,24 @@ func SearchPurchaseRecords(column int, key string) (resp *Response) {
 	}
 
 	var rows []*PurchaseRecord
-	n, err := table.All(&rows)
+	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
 	if err != nil {
 		resp.Error = err.Error()
 		return
 	}
 	log.Println("SearchPurchaseRecords Total count:", n)
+	if n > 0 {
+		log.Println("SearchPurchaseRecords first:", rows[0])
+	}
 	resp.Data = rows
 	return
 }
 
 func DelPurchaseRecord(id int) string {
 	r := PurchaseRecord{Id: id}
-	_, err := db.Delete(&r)
+	// _, err := db.Delete(&r)
+	r.Deleted = 1
+	_, err := db.Update(&r, "Deleted")
 	defer log.Println("DelPurchaseRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -113,19 +118,24 @@ func SearchSaleRecords(column int, key string) (resp *Response) {
 	}
 
 	var rows []*SaleRecord
-	n, err := table.All(&rows)
+	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
 	if err != nil {
 		resp.Error = err.Error()
 		return
 	}
 	log.Println("SearchSaleRecords Total count:", n)
+	if n > 0 {
+		log.Println("SearchSaleRecords first:", rows[0])
+	}
 	resp.Data = rows
 	return
 }
 
 func DelSaleRecord(id int) string {
 	r := SaleRecord{Id: id}
-	_, err := db.Delete(&r)
+	// _, err := db.Delete(&r)
+	r.Deleted = 1
+	_, err := db.Update(&r, "Deleted")
 	defer log.Println("DelSaleRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -155,12 +165,10 @@ func SearchCostRecords(column int, key string) (resp *Response) {
 
 	if column == SEARCH_DATE {
 		table = table.Filter("date__icontains", key)
-	} else {
-		table = table.Filter("customer__icontains", key)
 	}
 
 	var rows []*CostRecord
-	n, err := table.All(&rows)
+	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
 	if err != nil {
 		resp.Error = err.Error()
 		return
@@ -175,7 +183,9 @@ func SearchCostRecords(column int, key string) (resp *Response) {
 
 func DelCostRecord(id int) string {
 	r := CostRecord{Id: id}
-	_, err := db.Delete(&r)
+	// _, err := db.Delete(&r)
+	r.Deleted = 1
+	_, err := db.Update(&r, "Deleted")
 	defer log.Println("DelCostRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -205,12 +215,10 @@ func SearchStockRecords(column int, key string) (resp *Response) {
 
 	if column == SEARCH_DATE {
 		table = table.Filter("date__icontains", key)
-	} else {
-		table = table.Filter("customer__icontains", key)
 	}
 
 	var rows []*StockRecord
-	n, err := table.All(&rows)
+	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
 	if err != nil {
 		resp.Error = err.Error()
 		return
@@ -225,7 +233,9 @@ func SearchStockRecords(column int, key string) (resp *Response) {
 
 func DelStockRecord(id int) string {
 	r := StockRecord{Id: id}
-	_, err := db.Delete(&r)
+	// _, err := db.Delete(&r)
+	r.Deleted = 1
+	_, err := db.Update(&r, "Deleted")
 	defer log.Println("DelStockRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -244,7 +254,8 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 		return err.Error()
 	}
 
-	_, err = db.Update(r, "Date")
+	r.Id = old.Id
+	_, err = db.Update(r)
 	if err != nil {
 		return err.Error()
 	}
@@ -258,12 +269,10 @@ func SearchFinanceStaticss(column int, key string) (resp *Response) {
 
 	if column == SEARCH_DATE {
 		table = table.Filter("date__icontains", key)
-	} else {
-		table = table.Filter("customer__icontains", key)
 	}
 
 	var rows []*FinanceStatics
-	n, err := table.All(&rows)
+	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
 	if err != nil {
 		resp.Error = err.Error()
 		return
@@ -278,6 +287,7 @@ func SearchFinanceStaticss(column int, key string) (resp *Response) {
 
 func CalcFinanceByDate(date string) string {
 	r := FinanceStatics{Date: date}
+	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
 	resp = SearchPurchaseRecords(SEARCH_DATE, date)
 	for _, row := range resp.Data.([]*PurchaseRecord) {

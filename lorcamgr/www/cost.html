@@ -56,20 +56,26 @@
                 </div>
             </div>
             
-            <table id="myTable" class="mtop5" data-show-multi-sort="true"
-                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]' >
+            <table id="myTable" class="mtop5"   >
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-field="TeaCost">茶餐费</th>
-                        <th data-sortable="true" data-align="center" data-field="LaborCost">人工费</th>
-                        <th data-sortable="true" data-align="center" data-field="Freight">运费</th>
-                        <th data-sortable="true" data-align="center" data-field="Postage">邮费</th>
-                        <th data-sortable="true" data-align="center" data-field="CartonCost">纸箱</th>
-                        <th data-sortable="true" data-align="center" data-field="Consumables">小材</th>
-                        <th data-sortable="true" data-align="center" data-field="PackingCharges">包装材料费</th>
-                        <th data-sortable="true" data-align="center" data-field="Total">合计(元)</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="TeaCost">茶餐费
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LaborCost">
+                            人工费</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Freight">运费
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Postage">邮费
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="CartonCost">
+                            纸箱</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Consumables">
+                            小材</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                            data-field="PackingCharges">包装材料费</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"  data-field="Total">合计</th>
                         <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
                     </tr>
                 </thead>

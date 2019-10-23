@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
+	"time"
 
 	"github.com/zserge/lorca"
 )
@@ -19,7 +21,18 @@ const (
 	tableUI
 )
 
+var (
+	TRIAL_DAY  = "8"
+	BUILD_TIME = "20191010"
+)
+
 func main() {
+	hoursleft := expireDate().Sub(time.Now()).Hours()
+	if hoursleft < 0 {
+		log.Fatalln("试用期已过,请联系作者zhoutong.zht@gmail.com ")
+		return
+	}
+
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +46,15 @@ NEWUI:
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer ui.Close()
+	defer ui.Close() // 因为循环可能关闭多次
+
+	ui.Bind("loginReady", func() {
+		if hoursleft < 24*3 {
+			ui.Eval(fmt.Sprintf(`
+				$('#expireInfo').removeClass('hide').html('该软件将在%s过期,请联系作者zhoutong.zht@gmail.com获取正式版');
+			`, expireDate().Format("2006/01/02 15:04:05")))
+		}
+	})
 
 	ui.Bind("menuUI", func() {
 		curUI = menuUI
@@ -93,13 +114,26 @@ NEWUI:
 
 	select {
 	case <-sigc:
+		ui.Close()
+
 	case <-ui.Done():
 		// log.Println("curUI", curUI, tableUI)
 		if curUI == tableUI {
 			signal.Stop(sigc)
+			ui.Close()
 			goto NEWUI
 		}
 	}
 
 	log.Println("exiting...")
+}
+
+func NewUI(curUI int, addr string) {
+
+}
+
+func expireDate() time.Time {
+	days, _ := strconv.ParseInt(TRIAL_DAY, 10, 0)
+	since, _ := time.Parse("20060102", BUILD_TIME)
+	return since.AddDate(0, 0, int(days))
 }

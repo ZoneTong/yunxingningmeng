@@ -5,6 +5,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/shopspring/decimal"
 )
 
 var (
@@ -22,11 +23,13 @@ func init() {
 }
 
 type User struct {
-	Id   int
-	Name string
-	// Profile     *Profile   `orm:"rel(one)"` // OneToOne relation
-	// Post        []*Post `orm:"reverse(many)"` // 设置一对多的反向关系
+	Id       int
+	Name     string
 	Password string
+
+	Deleted int       // 删除标志
+	Created time.Time `orm:"auto_now_add"`
+	Updated time.Time `orm:"auto_now"`
 }
 
 // type Record struct {
@@ -49,12 +52,13 @@ type PurchaseRecord struct {
 	Number               int    // 件数
 	Weight, Price, Total float64
 
+	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`
 }
 
 func (p *PurchaseRecord) CalcTotal() float64 {
-	return p.Weight * p.Price
+	return FloatMul(p.Weight, p.Price)
 }
 
 type SaleRecord struct {
@@ -68,12 +72,13 @@ type SaleRecord struct {
 	Number               int
 	Weight, Price, Total float64
 
+	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`
 }
 
 func (p *SaleRecord) CalcTotal() float64 {
-	return p.Weight * p.Price
+	return FloatMul(p.Weight, p.Price)
 }
 
 type CostRecord struct {
@@ -85,12 +90,13 @@ type CostRecord struct {
 	Consumables, PackingCharges                      float64
 	Total                                            float64
 
+	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`
 }
 
 func (r *CostRecord) CalcTotal() float64 {
-	return r.TeaCost + r.LaborCost + r.Freight + r.Postage + r.CartonCost + r.Consumables + r.PackingCharges
+	return FloatSum(r.TeaCost, r.LaborCost, r.Freight, r.Postage, r.CartonCost, +r.Consumables, +r.PackingCharges)
 }
 
 type StockRecord struct {
@@ -103,6 +109,7 @@ type StockRecord struct {
 	Weight, Money  float64
 	SurplusStock   float64 // 剩余库存
 
+	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`
 }
@@ -114,10 +121,29 @@ type FinanceStatics struct {
 
 	Purchase, Sale, Cost, LastBalance, Total float64
 
+	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
 	Updated time.Time `orm:"auto_now"`
 }
 
 func (r *FinanceStatics) CalcTotal() float64 {
-	return r.Sale - r.Purchase - r.Cost + r.LastBalance
+	return FloatSum(r.Sale, -r.Purchase, -r.Cost, +r.LastBalance)
+}
+
+func FloatSum(floats ...float64) float64 {
+	r := decimal.NewFromFloat(0)
+	for _, f := range floats {
+		r = r.Add(decimal.NewFromFloat(f))
+	}
+	f, _ := r.Float64()
+	return f
+}
+
+func FloatMul(floats ...float64) float64 {
+	r := decimal.NewFromFloat(1)
+	for _, f := range floats {
+		r = r.Mul(decimal.NewFromFloat(f))
+	}
+	f, _ := r.Float64()
+	return f
 }

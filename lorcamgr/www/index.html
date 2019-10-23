@@ -8,12 +8,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
 	<link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
 	<link href="common.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="loginReady()">
 	<!-- UI layout -->
 	<div class="container ">
 		<div class="form-group">
@@ -25,6 +25,9 @@
 			</div>
 			<div class="col-xs-12"> <button type="submit" class="btn btn-info btn-sm btn-block" id="login">登陆</button>
 			</div>
+			<div class="col-xs-12">
+				<div class="alert alert-warning hide form-group" role="alert" style="font-size:12px;" id="expireInfo">过期警告</div>
+			</div>
 		</div>
 	</div>
 
@@ -33,6 +36,10 @@
 	<script src="js/bootstrap-dialog.min.js"></script>
 	<script src="common.js"></script>
 	<script>
+		// $(document).ready(function () {
+		// 	$('#expireInfo').removeClass('hide').html('明天过期');
+		// });
+
 		const login = document.querySelector('#login');
 
 		login.addEventListener('click', async () => {

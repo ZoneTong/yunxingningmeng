@@ -56,17 +56,16 @@
                 </div>
             </div>
             
-            <table id="myTable" class="mtop5" data-show-multi-sort="true"
-                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]'>
+            <table id="myTable" class="mtop5"  >
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
                         <th data-sortable="true" data-align="center" data-field="Specifications">规格</th>
                         <th data-sortable="true" data-align="center" data-field="Operation">库存操作</th>
-                        <th data-sortable="true" data-align="center" data-field="Weight">重量(斤)</th>
-                        <th data-sortable="true" data-align="center" data-field="Money">金额(元)</th>
-                        <th data-sortable="true" data-align="center" data-field="SurplusStock">剩余库存(斤)</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"   data-field="Weight">重量</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"   data-field="Money">金额</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"   data-field="SurplusStock">剩余库存</th>
                         <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
                     </tr>
                 </thead>

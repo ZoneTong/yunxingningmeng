@@ -8,7 +8,8 @@ function pack(){
 
 cd `dirname $0`
 if [ "$1" == "" ]; then
-    go run -tags generate gen.go
+    # go run -tags generate gen.go
+    go generate
 fi
-go build
+go build -ldflags "-X main.TRIAL_DAY=8 -X 'main.BUILD_TIME=`date +%Y%m%d`'  "
 ./lorcamgr
