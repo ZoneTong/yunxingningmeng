@@ -44,28 +44,61 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 	return "ok"
 }
 
-func SearchPurchaseRecords(column int, key string) (resp *Response) {
-	resp = new(Response)
+func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&PurchaseRecord{})
 
-	if column == SEARCH_DATE {
-		table = table.Filter("date__icontains", key)
+	if c.SearchArea == SEARCH_DATE {
+		table = table.Filter("date__icontains", c.SearchKey)
 	} else {
-		table = table.Filter("provider__icontains", key)
+		table = table.Filter("provider__icontains", c.SearchKey)
 	}
 
 	var rows []*PurchaseRecord
-	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
+	table, resp, err := searchPartial(table, c)
 	if err != nil {
 		resp.Error = err.Error()
+	}
+
+	_, err = table.All(&rows)
+	if err != nil {
 		return
 	}
-	log.Println("SearchPurchaseRecords Total count:", n)
-	if n > 0 {
+
+	resp.Rows = rows
+	log.Println("SearchPurchaseRecords Total count:", resp.Total, len(rows))
+	if resp.Total > 0 {
 		log.Println("SearchPurchaseRecords first:", rows[0])
 	}
-	resp.Rows = rows
 	return
+}
+
+func searchPartial(table orm.QuerySeter, c SearchCondition) (newtable orm.QuerySeter, resp *Response, err error) {
+	log.Println("searchPartial", c)
+	resp = new(Response)
+	orders := []string{"-date", "-id"}
+	newtable = table.Filter("deleted", 0)
+	resp.Total, err = newtable.Count()
+	// resp.TotalNotFiltered = resp.Total
+	if err != nil {
+		return
+	}
+
+	// orderby
+	if c.SortName != "" {
+		orders[0] = structFieldName2DBCloumnName(c.SortName)
+		if c.SortOrder == "desc" {
+			orders[0] = "-" + orders[0]
+		}
+	}
+
+	log.Println("searchPartial orders", orders)
+	newtable = newtable.OrderBy(orders...)
+
+	if c.PageSize > 0 {
+		newtable = newtable.Limit(c.PageSize, (c.PageNumber-1)*c.PageSize)
+	}
+	return
+
 }
 
 func DelPurchaseRecord(id int) string {
@@ -96,27 +129,31 @@ func NewOrEditSaleRecord(r *SaleRecord) string {
 	return "ok"
 }
 
-func SearchSaleRecords(column int, key string) (resp *Response) {
-	resp = new(Response)
+func SearchSaleRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&SaleRecord{})
-
-	if column == SEARCH_DATE {
-		table = table.Filter("date__icontains", key)
+	if c.SearchArea == SEARCH_DATE {
+		table = table.Filter("date__icontains", c.SearchKey)
 	} else {
-		table = table.Filter("customer__icontains", key)
+		table = table.Filter("customer__icontains", c.SearchKey)
 	}
 
 	var rows []*SaleRecord
-	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
+	table, resp, err := searchPartial(table, c)
 	if err != nil {
 		resp.Error = err.Error()
+	}
+
+	_, err = table.All(&rows)
+	if err != nil {
 		return
 	}
-	log.Println("SearchSaleRecords Total count:", n)
-	if n > 0 {
+
+	resp.Rows = rows
+
+	log.Println("SearchSaleRecords Total count:", resp.Total, len(rows))
+	if resp.Total > 0 {
 		log.Println("SearchSaleRecords first:", rows[0])
 	}
-	resp.Rows = rows
 	return
 }
 
@@ -148,25 +185,29 @@ func NewOrEditCostRecord(r *CostRecord) string {
 	return "ok"
 }
 
-func SearchCostRecords(column int, key string) (resp *Response) {
-	resp = new(Response)
+func SearchCostRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&CostRecord{})
-
-	if column == SEARCH_DATE {
-		table = table.Filter("date__icontains", key)
+	if c.SearchArea == SEARCH_DATE {
+		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
 	var rows []*CostRecord
-	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
+	table, resp, err := searchPartial(table, c)
 	if err != nil {
 		resp.Error = err.Error()
+	}
+
+	_, err = table.All(&rows)
+	if err != nil {
 		return
 	}
-	log.Println("SearchCostRecords Total count:", n)
-	if n > 0 {
+
+	resp.Rows = rows
+
+	log.Println("SearchCostRecords Total count:", resp.Total, len(rows))
+	if resp.Total > 0 {
 		log.Println("SearchCostRecords first:", rows[0])
 	}
-	resp.Rows = rows
 	return
 }
 
@@ -198,25 +239,29 @@ func NewOrEditStockRecord(r *StockRecord) string {
 	return "ok"
 }
 
-func SearchStockRecords(column int, key string) (resp *Response) {
-	resp = new(Response)
+func SearchStockRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&StockRecord{})
-
-	if column == SEARCH_DATE {
-		table = table.Filter("date__icontains", key)
+	if c.SearchArea == SEARCH_DATE {
+		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
 	var rows []*StockRecord
-	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
+	table, resp, err := searchPartial(table, c)
 	if err != nil {
 		resp.Error = err.Error()
+	}
+
+	_, err = table.All(&rows)
+	if err != nil {
 		return
 	}
-	log.Println("SearchStockRecords Total count:", n)
-	if n > 0 {
+
+	resp.Rows = rows
+
+	log.Println("SearchStockRecords Total count:", resp.Total, len(rows))
+	if resp.Total > 0 {
 		log.Println("SearchStockRecords first:", rows[0])
 	}
-	resp.Rows = rows
 	return
 }
 
@@ -253,50 +298,27 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 }
 
 func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
-	log.Println("SearchFinanceStaticss", c)
-	column := c.SearchArea
-	key := c.SearchKey
-
-	resp = new(Response)
 	table := db.QueryTable(&FinanceStatics{})
-
-	if column == SEARCH_DATE {
-		table = table.Filter("date__icontains", key)
+	if c.SearchArea == SEARCH_DATE {
+		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
 	var rows []*FinanceStatics
-	var err error
-	orders := []string{"-date", "-id"}
-	table = table.Filter("deleted", 0)
-	resp.Total, err = table.Count()
-	// resp.TotalNotFiltered = resp.Total
+	table, resp, err := searchPartial(table, c)
 	if err != nil {
-		goto ERR
+		resp.Error = err.Error()
 	}
 
-	// orderby
-	if c.SortName != "" {
-		orders[0] = structFieldName2DBCloumnName(c.SortName)
-		if c.SortOrder == "desc" {
-			orders[0] = "-" + orders[0]
-		}
-	}
-	table = table.OrderBy(orders...)
-
-	_, err = table.Limit(c.PageSize, (c.PageNumber-1)*c.PageSize).All(&rows)
+	_, err = table.All(&rows)
 	if err != nil {
-		goto ERR
+		return
 	}
+
+	resp.Rows = rows
+
 	log.Println("SearchFinanceStaticss Total count:", resp.Total, len(rows))
 	if resp.Total > 0 {
 		log.Println("SearchFinanceStaticss first:", rows[0])
-	}
-	resp.Rows = rows
-	return
-
-ERR:
-	if err != nil {
-		resp.Error = err.Error()
 	}
 	return
 }
@@ -305,19 +327,20 @@ func CalcFinanceByDate(date string) string {
 	r := FinanceStatics{Date: date}
 	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
-	resp = SearchPurchaseRecords(SEARCH_DATE, date)
+	c := SearchCondition{SearchArea: SEARCH_DATE, SearchKey: date}
+	resp = SearchPurchaseRecords(c)
 	for _, row := range resp.Rows.([]*PurchaseRecord) {
 		r.Purchase += row.Total
 		r.PurchasedStock += row.Weight
 	}
 
-	resp = SearchSaleRecords(SEARCH_DATE, date)
+	resp = SearchSaleRecords(c)
 	for _, row := range resp.Rows.([]*SaleRecord) {
 		r.Sale += row.Total
 		r.SaledStock += row.Weight
 	}
 
-	resp = SearchCostRecords(SEARCH_DATE, date)
+	resp = SearchCostRecords(c)
 	for _, row := range resp.Rows.([]*CostRecord) {
 		r.Cost += row.Total
 	}

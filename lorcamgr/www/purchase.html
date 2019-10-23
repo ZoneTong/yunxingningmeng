@@ -56,8 +56,9 @@
                     </div>
                 </div>
             </div>
-            
-            <table id="myTable" class="mtop5"  >
+
+            <table id="myTable" class="mtop5" data-pagination="true" data-page-size="31" data-page-list="[31]"
+                data-side-pagination="server" data-silent-sort="false">
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-field="Id">序号</th>
@@ -164,7 +165,16 @@
                 fillModal(row);
                 $('#myModal #submitBtn').hide();
                 $('#myModal').modal();
+            }).on('page-change.bs.table', function (e, number, size) {
+            condition.pageNumber = number;
+            condition.pageSize = size;
+            refreshData()
+            }).on('sort.bs.table', function (e, name, order) {
+            condition.sortName = name;
+            condition.sortOrder = order;
+            refreshData();
             });
+            $.extend(condition, $('#myTable').bootstrapTable('getOptions'));
             refreshData();
 
             fillModal();
@@ -188,21 +198,21 @@
         });
 
         // 表格
-        let condition = {
-            searchArea: 0,
-            searchKey: ''
+        var condition = {
+        searchArea: 0,
+        searchKey: '',
         };
         const refreshData = async () => {
-            let r = await window.searchPurchaseRecords(condition.searchArea, condition.searchKey);
+            let r = await window.searchPurchaseRecords(condition);
             // console.log(r);
             if (r.Error && r.Error != '') {
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
-                $.each(r.Data, function (i, e) {
+                $.each(r.rows, function (i, e) {
                 e.Total = floatRound(e.Total);
                 })
-                $('#myTable').bootstrapTable('load', r.Data);
+                $('#myTable').bootstrapTable('load', r);
             }
         };
 
