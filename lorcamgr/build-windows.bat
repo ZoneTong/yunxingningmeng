@@ -1,14 +1,16 @@
 @echo off
 
 echo pack begin
-move icons/ningmeng.ico www/
-
+xcopy icons\ningmeng.ico www\ 	/Y 
 go generate
-move www/ningmeng.ico icons/
-go build -ldflags "-H windowsgui -X main.TRIAL_DAY=15 -X 'main.BUILD_TIME=`date +%Y%m%d`'"  -o yunxing.exe
+rm www\ningmeng.ico
+go build -ldflags "-H windowsgui -X main.TRIAL_DAY=21 -X 'main.BUILD_TIME=%date:~0,4%%date:~5,2%%date:~8,2%'"  -o yunxing.exe
+:: go build -ldflags "-H windowsgui -X main.TRIAL_DAY=2 -X 'main.BUILD_TIME=20191023'"  -o yunxing.exe
+
 mkdir yunxingmgr
-copy yunxing.exe yunxingmgr
-copy icons/* yunxingmgr
-zip yunxingmgr
+xcopy  yunxing.exe yunxingmgr 	/Y 
+xcopy  icons\* yunxingmgr 		/Y 
+zip -q -r ‘À–Àƒ˚√ .zip  yunxingmgr
+rmdir /s /q yunxingmgr
 
 echo pack end
