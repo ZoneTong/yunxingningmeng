@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"time"
 
@@ -13,7 +12,7 @@ func verifyPassword(account, password string) string {
 	u.Name = account
 	err := db.Read(u, "Name")
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == orm.ErrNoRows {
 			return "账号不存在"
 		}
 		return err.Error()
@@ -47,7 +46,7 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&PurchaseRecord{})
 
-	if c.SearchArea == SEARCH_DATE {
+	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	} else {
 		table = table.Filter("provider__icontains", c.SearchKey)
@@ -131,7 +130,7 @@ func NewOrEditSaleRecord(r *SaleRecord) string {
 
 func SearchSaleRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&SaleRecord{})
-	if c.SearchArea == SEARCH_DATE {
+	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	} else {
 		table = table.Filter("customer__icontains", c.SearchKey)
@@ -187,7 +186,7 @@ func NewOrEditCostRecord(r *CostRecord) string {
 
 func SearchCostRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&CostRecord{})
-	if c.SearchArea == SEARCH_DATE {
+	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
@@ -241,7 +240,7 @@ func NewOrEditStockRecord(r *StockRecord) string {
 
 func SearchStockRecords(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&StockRecord{})
-	if c.SearchArea == SEARCH_DATE {
+	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
@@ -299,7 +298,7 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 
 func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
 	table := db.QueryTable(&FinanceStatics{})
-	if c.SearchArea == SEARCH_DATE {
+	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
 
@@ -327,7 +326,7 @@ func CalcFinanceByDate(date string) string {
 	r := FinanceStatics{Date: date}
 	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
-	c := SearchCondition{SearchArea: SEARCH_DATE, SearchKey: date}
+	c := SearchCondition{SearchField: SEARCH_DATE, SearchKey: date}
 	resp = SearchPurchaseRecords(c)
 	for _, row := range resp.Rows.([]*PurchaseRecord) {
 		r.Purchase += row.Total

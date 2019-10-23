@@ -43,7 +43,7 @@
                                 appearance:none;
                                 -moz-appearance:none;
                                 -webkit-appearance:none;
-                                " id="searchArea">
+                                " id="searchField">
                                 <option value=0>日期</option>
                                 <option value=2>客户</option>
                             </select>
@@ -199,7 +199,7 @@
 
         // 表格
         var condition = {
-        searchArea: 0,
+        searchField: 0,
         searchKey: '',
         };
         const refreshData = async () => {
@@ -252,16 +252,16 @@
             }
         };
 
-        $('#searchArea').change(function () {
-            // $('#searchKey').attr('placeholder', $('#searchArea').find("option:selected").text() );
-            condition.searchArea = parseInt($('#searchArea').val());
-            switch (condition.searchArea) {
+        $('#searchField').change(function () {
+            // $('#searchKey').attr('placeholder', $('#searchField').find("option:selected").text() );
+            condition.searchField = parseInt($('#searchField').val());
+            switch (condition.searchField) {
                 case 0:
                     $('#searchKey').attr('placeholder', '201910');
                     break;
 
                 default:
-                    $('#searchKey').attr('placeholder', $('#searchArea').find("option:selected").text());
+                    $('#searchKey').attr('placeholder', $('#searchField').find("option:selected").text());
                     break;
             }
 

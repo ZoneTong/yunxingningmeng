@@ -36,12 +36,23 @@
 	<script src="js/bootstrap-dialog.min.js"></script>
 	<script src="common.js"></script>
 	<script>
-		// $(document).ready(function () {
-		// 	$('#expireInfo').removeClass('hide').html('明天过期');
-		// });
+		$(document).ready(function () {
+			$('#account').trigger('focus');
+		});
+
+		$("#account").keydown(function() {
+			if (event.keyCode == "13") {//keyCode=13是回车键
+				$('#password').trigger('focus');
+			}
+		});
+
+		$("#password").keydown(function() {
+			if (event.keyCode == "13") {//keyCode=13是回车键
+				$('#login').click();
+			}
+		});
 
 		const login = document.querySelector('#login');
-
 		login.addEventListener('click', async () => {
 			let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector(
 				'#password').value);
