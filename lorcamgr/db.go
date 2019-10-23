@@ -119,7 +119,8 @@ type FinanceStatics struct {
 	Id   int `orm:"pk;auto;null"`
 	Date string
 
-	Purchase, Sale, Cost, LastBalance, Total float64
+	Purchase, Sale, Cost, LastBalance, Total          float64
+	PurchasedStock, SaledStock, LastStock, TotalStock float64 // 今日消耗库存, 昨日库存, 剩余库存
 
 	Deleted int       // 删除标志
 	Created time.Time `orm:"auto_now_add"`
@@ -128,6 +129,10 @@ type FinanceStatics struct {
 
 func (r *FinanceStatics) CalcTotal() float64 {
 	return FloatSum(r.Sale, -r.Purchase, -r.Cost, +r.LastBalance)
+}
+
+func (r *FinanceStatics) CalcStock() float64 {
+	return FloatSum(r.PurchasedStock, r.LastStock, -r.SaledStock)
 }
 
 func FloatSum(floats ...float64) float64 {

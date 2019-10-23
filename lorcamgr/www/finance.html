@@ -19,7 +19,7 @@
     </style>
 </head>
 
-<body onload="tableUI2()">
+<body onload="tableUI()">
     <div class="container-fluid">
         <div class="form-group main_ui">
             <div class="row" id="toolbar">
@@ -76,15 +76,27 @@
                     <tr>
                         <th data-sortable="true" data-align="center" data-visible="false" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">日采购
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">采购
                         </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">日销售
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">销售
                         </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">日费用
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">成本
                         </th>
                         <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LastBalance">
                             上日结余</th>
                         <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"   data-field="Total">金额</th>
+
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                            data-field="PurchasedStock">采购量
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                            data-field="SaledStock">销售量
+                        </th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                            data-field="LastStock">
+                            上日库存</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                            data-field="TotalStock">库存</th>
                     </tr>
                 </thead>
             </table>
@@ -145,7 +157,12 @@
                     'Sale': 3.5,
                     'Cost': 2.6,
                     'LastBalance': 34.6,
-                    'Total': 91.6
+                    'Total': 91.6,
+
+                    'PurchasedStock': 2.3,
+                    'SaledStock': 4.5,
+                    'LastStock': 6.7,
+                    'TotalStock': 8.9,
                 }]
             }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
                 row.edit_status = 0;
@@ -178,6 +195,11 @@
                     e.Cost= floatRound(e.Cost);
                     e.LastBalance = floatRound(e.LastBalance);
                     e.Total = floatRound(e.Total);
+
+                    e.PurchasedStock= floatRound(e.PurchasedStock);
+                    e.SaledStock = floatRound(e.SaledStock);
+                    e.LastStock = floatRound(e.LastStock);
+                    e.TotalStock = floatRound(e.TotalStock);
                 })
                 $('#myTable').bootstrapTable('load', r.Data);
             }

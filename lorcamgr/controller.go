@@ -247,7 +247,7 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 	log.Println("NewOrEditFinanceStatics", *r)
 	var err error
 	r.Total = r.CalcTotal()
-
+	r.TotalStock = r.CalcStock()
 	old := FinanceStatics{Date: r.Date}
 	_, _, err = db.ReadOrCreate(&old, "Date")
 	if err != nil {
@@ -292,11 +292,13 @@ func CalcFinanceByDate(date string) string {
 	resp = SearchPurchaseRecords(SEARCH_DATE, date)
 	for _, row := range resp.Data.([]*PurchaseRecord) {
 		r.Purchase += row.Total
+		r.PurchasedStock += row.Weight
 	}
 
 	resp = SearchSaleRecords(SEARCH_DATE, date)
 	for _, row := range resp.Data.([]*SaleRecord) {
 		r.Sale += row.Total
+		r.SaledStock += row.Weight
 	}
 
 	resp = SearchCostRecords(SEARCH_DATE, date)
@@ -316,6 +318,7 @@ func CalcFinanceByDate(date string) string {
 		return err.Error()
 	}
 	r.LastBalance = pre_f.Total
+	r.LastStock = pre_f.TotalStock
 
 	return newOrEditFinanceStatics(&r)
 }
