@@ -68,23 +68,26 @@
                 </div>
             </div>
             
-            <table id="myTable" class="mtop5"
+            <table id="myTable" class="mtop5" data-silent-sort="false" data-pagination="true" data-page-size="3"
+                data-page-list="[31]"
+                data-side-pagination="server"
+                data-show-extended-pagination="true"
+                data-total-not-filtered-field="totalNotFiltered"
                 >
-            <!-- data-show-multi-sort="true"
-                data-sort-priority='[{"sortName":"Date","sortOrder":"desc"},{"sortName":"Id","sortOrder":"desc"}]'  -->
+                <!-- data-side-pagination="server" -->
                 <thead>
                     <tr>
                         <th data-sortable="true" data-align="center" data-visible="false" data-field="Id">序号</th>
                         <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">采购
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">采购费
                         </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">销售
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">销售费
                         </th>
                         <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">成本
                         </th>
                         <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LastBalance">
                             上日结余</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"   data-field="Total">金额</th>
+                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">金额</th>
 
                         <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
                             data-field="PurchasedStock">采购量
@@ -169,7 +172,16 @@
                 fillModal(row);
                 $('#myModal #submitBtn').hide();
                 $('#myModal').modal();
+            }).on('page-change.bs.table', function (e, number, size) {
+                condition.pageNumber = number;
+                condition.pageSize = size;
+                refreshData()
+            }).on('sort.bs.table', function (e, name, order) {
+                condition.sortName = name;
+                condition.sortOrder = order;
+                refreshData();
             });
+            $.extend(condition, $('#myTable').bootstrapTable('getOptions'));
             refreshData();
             
             let today = new Date();
@@ -178,18 +190,18 @@
         });
 
         // 表格
-        let condition = {
+        var condition = {
             searchArea: 0,
-            searchKey: ''
+            searchKey: '',
         };
         const refreshData = async () => {
-            let r = await window.searchFinanceStaticss(condition.searchArea, condition.searchKey);
+            let r = await window.searchFinanceStaticss(condition);
             // console.log(r);
             if (r.Error && r.Error != '') {
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
-                $.each(r.Data, function (i, e) {
+                $.each(r.rows, function (i, e) {
                     e.Purchase = floatRound(e.Purchase);
                     e.Sale = floatRound( e.Sale);
                     e.Cost= floatRound(e.Cost);
@@ -200,8 +212,8 @@
                     e.SaledStock = floatRound(e.SaledStock);
                     e.LastStock = floatRound(e.LastStock);
                     e.TotalStock = floatRound(e.TotalStock);
-                })
-                $('#myTable').bootstrapTable('load', r.Data);
+                });
+                $('#myTable').bootstrapTable('load', r);
             }
         };
 

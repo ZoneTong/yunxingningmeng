@@ -5,7 +5,6 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/shopspring/decimal"
 )
 
 var (
@@ -133,22 +132,4 @@ func (r *FinanceStatics) CalcTotal() float64 {
 
 func (r *FinanceStatics) CalcStock() float64 {
 	return FloatSum(r.PurchasedStock, r.LastStock, -r.SaledStock)
-}
-
-func FloatSum(floats ...float64) float64 {
-	r := decimal.NewFromFloat(0)
-	for _, f := range floats {
-		r = r.Add(decimal.NewFromFloat(f))
-	}
-	f, _ := r.Float64()
-	return f
-}
-
-func FloatMul(floats ...float64) float64 {
-	r := decimal.NewFromFloat(1)
-	for _, f := range floats {
-		r = r.Mul(decimal.NewFromFloat(f))
-	}
-	f, _ := r.Float64()
-	return f
 }

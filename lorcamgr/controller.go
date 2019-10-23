@@ -44,17 +44,6 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 	return "ok"
 }
 
-const (
-	SEARCH_DATE = iota
-	SEARCH_PROVIDER
-	SEARCH_CUSTOMER
-)
-
-type Response struct {
-	Data  interface{}
-	Error string
-}
-
 func SearchPurchaseRecords(column int, key string) (resp *Response) {
 	resp = new(Response)
 	table := db.QueryTable(&PurchaseRecord{})
@@ -75,7 +64,7 @@ func SearchPurchaseRecords(column int, key string) (resp *Response) {
 	if n > 0 {
 		log.Println("SearchPurchaseRecords first:", rows[0])
 	}
-	resp.Data = rows
+	resp.Rows = rows
 	return
 }
 
@@ -127,7 +116,7 @@ func SearchSaleRecords(column int, key string) (resp *Response) {
 	if n > 0 {
 		log.Println("SearchSaleRecords first:", rows[0])
 	}
-	resp.Data = rows
+	resp.Rows = rows
 	return
 }
 
@@ -177,7 +166,7 @@ func SearchCostRecords(column int, key string) (resp *Response) {
 	if n > 0 {
 		log.Println("SearchCostRecords first:", rows[0])
 	}
-	resp.Data = rows
+	resp.Rows = rows
 	return
 }
 
@@ -227,7 +216,7 @@ func SearchStockRecords(column int, key string) (resp *Response) {
 	if n > 0 {
 		log.Println("SearchStockRecords first:", rows[0])
 	}
-	resp.Data = rows
+	resp.Rows = rows
 	return
 }
 
@@ -263,7 +252,11 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 	return "ok"
 }
 
-func SearchFinanceStaticss(column int, key string) (resp *Response) {
+func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
+	log.Println("SearchFinanceStaticss", c)
+	column := c.SearchArea
+	key := c.SearchKey
+
 	resp = new(Response)
 	table := db.QueryTable(&FinanceStatics{})
 
@@ -272,16 +265,39 @@ func SearchFinanceStaticss(column int, key string) (resp *Response) {
 	}
 
 	var rows []*FinanceStatics
-	n, err := table.Filter("deleted", 0).OrderBy("-date", "-id").All(&rows)
+	var err error
+	orders := []string{"-date", "-id"}
+	table = table.Filter("deleted", 0)
+	resp.Total, err = table.Count()
+	// resp.TotalNotFiltered = resp.Total
 	if err != nil {
-		resp.Error = err.Error()
-		return
+		goto ERR
 	}
-	log.Println("SearchFinanceStaticss Total count:", n)
-	if n > 0 {
+
+	// orderby
+	if c.SortName != "" {
+		orders[0] = structFieldName2DBCloumnName(c.SortName)
+		if c.SortOrder == "desc" {
+			orders[0] = "-" + orders[0]
+		}
+	}
+	table = table.OrderBy(orders...)
+
+	_, err = table.Limit(c.PageSize, (c.PageNumber-1)*c.PageSize).All(&rows)
+	if err != nil {
+		goto ERR
+	}
+	log.Println("SearchFinanceStaticss Total count:", resp.Total, len(rows))
+	if resp.Total > 0 {
 		log.Println("SearchFinanceStaticss first:", rows[0])
 	}
-	resp.Data = rows
+	resp.Rows = rows
+	return
+
+ERR:
+	if err != nil {
+		resp.Error = err.Error()
+	}
 	return
 }
 
@@ -290,19 +306,19 @@ func CalcFinanceByDate(date string) string {
 	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
 	resp = SearchPurchaseRecords(SEARCH_DATE, date)
-	for _, row := range resp.Data.([]*PurchaseRecord) {
+	for _, row := range resp.Rows.([]*PurchaseRecord) {
 		r.Purchase += row.Total
 		r.PurchasedStock += row.Weight
 	}
 
 	resp = SearchSaleRecords(SEARCH_DATE, date)
-	for _, row := range resp.Data.([]*SaleRecord) {
+	for _, row := range resp.Rows.([]*SaleRecord) {
 		r.Sale += row.Total
 		r.SaledStock += row.Weight
 	}
 
 	resp = SearchCostRecords(SEARCH_DATE, date)
-	for _, row := range resp.Data.([]*CostRecord) {
+	for _, row := range resp.Rows.([]*CostRecord) {
 		r.Cost += row.Total
 	}
 
@@ -326,14 +342,6 @@ func CalcFinanceByDate(date string) string {
 const (
 	DATE_FORMAT = "20060102"
 )
-
-func nextNDate(date string, n int) (nd string, err error) {
-	t, err := time.Parse(DATE_FORMAT, date)
-	if err != nil {
-		return "", err
-	}
-	return t.AddDate(0, 0, n).Format(DATE_FORMAT), nil
-}
 
 func CalcFinanceByPeriod(from, to string) (errstr string) {
 	errstr = "ok"
