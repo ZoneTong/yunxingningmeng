@@ -10,7 +10,7 @@ go build -ldflags "-H windowsgui -X main.TRIAL_DAY=21 -X 'main.BUILD_TIME=%date:
 mkdir yunxingmgr
 xcopy  yunxing.exe yunxingmgr 	/Y 
 xcopy  icons\* yunxingmgr 		/Y 
-zip -q -r 运兴柠檬.zip  yunxingmgr
+zip -q -r yunxing%date:~0,4%%date:~5,2%%date:~8,2%.zip  yunxingmgr
 rmdir /s /q yunxingmgr
 
 echo pack end

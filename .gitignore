@@ -1,8 +1,11 @@
-lorcamgr/lorcamgr
 */tmp.*
 */*tmp
+*.DS_Store
 */*.DS_Store
+*/*/*.DS_Store
+*/*.exe
+*/*/*.exe
+lorcamgr/lorcamgr*
+lorcamgr/yunxingmgr/
 lorcamgr/data.db
-yunxingmgr/
-lorcamgr/icons/.DS_Store
-lorcamgr/icons/data.db
+lorcamgr/*/data.db
