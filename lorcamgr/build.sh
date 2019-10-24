@@ -12,5 +12,5 @@ if [ "$1" == "" ]; then
     # go run -tags generate gen.go
     go generate
 fi
-go build -ldflags "-X main.TRIAL_DAY=36500 -X 'main.BUILD_TIME=`date +%Y%m%d`'  "
+go build -ldflags "-X main.TRIAL_DAY=2 -X 'main.BUILD_TIME=`date +%Y%m%d`'  "
 ./lorcamgr

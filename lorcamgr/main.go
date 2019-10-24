@@ -22,7 +22,7 @@ const (
 )
 
 var (
-	TRIAL_DAY  = "8"
+	TRIAL_DAY  = "2"
 	BUILD_TIME = "20191010"
 )
 
@@ -41,7 +41,7 @@ func main() {
 	go http.Serve(ln, http.FileServer(FS))
 	var curUI = loginUI
 
-NEWUI:
+	// NEWUI:
 	ui, err := lorca.New("", "", 1400, 900)
 	if err != nil {
 		log.Fatal(err)
@@ -58,26 +58,10 @@ NEWUI:
 
 	ui.Bind("menuUI", func() {
 		curUI = menuUI
-		// bd, _ := ui.Bounds()
-		// bd.Width = 400
-		// bd.Height = 400
-		// ui.SetBounds(bd)
 	})
 
 	ui.Bind("tableUI", func() {
 		curUI = tableUI
-		// bd, _ := ui.Bounds()
-		// bd.Width = 1400
-		// bd.Height = 800
-		// ui.SetBounds(bd)
-	})
-
-	ui.Bind("tableUI2", func() {
-		curUI = tableUI
-		// bd, _ := ui.Bounds()
-		// bd.Width = 1150
-		// bd.Height = 800
-		// ui.SetBounds(bd)
 	})
 
 	ui.Bind("verifyPassword", verifyPassword)
@@ -114,22 +98,11 @@ NEWUI:
 
 	select {
 	case <-sigc:
-		ui.Close()
-
 	case <-ui.Done():
-		// log.Println("curUI", curUI, tableUI)
-		if curUI == tableUI {
-			signal.Stop(sigc)
-			ui.Close()
-			goto NEWUI
-		}
+		signal.Stop(sigc)
 	}
 
 	log.Println("exiting...")
-}
-
-func NewUI(curUI int, addr string) {
-
 }
 
 func expireDate() time.Time {

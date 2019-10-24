@@ -16,8 +16,27 @@
 		    font-size: 28px;
 		}
 
+		.input-group .form-control.selectcss {
+			width:100px;
+			padding:3px 10px;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			border-right: none;
+			background: white no-repeat 90% 50%;
+			background-size:13px 13px;
+			appearance:none;
+			-moz-appearance:none;
+			-webkit-appearance:none;
+		}
+
 		.mtop5,
 		.col-xs-12 input,
 		.col-xs-12 button {
 			margin-top: 5px
+		}
+		.pad0{
+			padding: 0px;
+		}
+		.full {
+			width: 100%;
 		}
