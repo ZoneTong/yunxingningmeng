@@ -216,7 +216,7 @@
                 $('#myModal').modal();
             },
             'click .delete': function (e, value, row, index) {
-                BootstrapDialog.confirm("确定删除记录?", async (result) => {
+                BootstrapDialog.confirm("确定删除该记录?", async (result) => {
                     if (!result) {
                         return
                     }
@@ -273,9 +273,9 @@
 
             if (record.Id != 0) {
                 if (record.edit_status == 1) {
-                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id + ' - 编辑');
+                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' - 序号 ' + record.Id + ' - 编辑');
                 } else {
-                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' -序号 ' + record.Id);
+                    $('#myModal #exampleModalLabel').html($('#titleInfo').text() + ' - 序号 ' + record.Id);
                 }
             }
             $('#myModal #edit_status').val(record.edit_status);
