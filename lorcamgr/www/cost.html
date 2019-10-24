@@ -2,7 +2,7 @@
 <html lang="zh">
 
 <head>
-    <title>运兴合作社管理软件-运营成本</title>
+    <title>运营成本--运兴合作社管理软件</title>
     <link rel="shortcut icon" href="ningmeng.ico">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,11 +13,12 @@
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="common.css" rel="stylesheet">
     <style>
-        body{
-            align-items:inherit
+        body {
+            align-items: inherit
         }
     </style>
 </head>
+
 <body onload="tableUI()">
     <div class="container-fluid full">
         <div class="main_ui">
@@ -27,9 +28,9 @@
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
                 <div class="col-xs-6 col-md-1">
-                        <button class="btn btn-info form-control" type="button" data-toggle="modal"
-                            data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
-                   
+                    <button class="btn btn-info form-control" type="button" data-toggle="modal"
+                        data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
+
                 </div>
 
                 <div class="col-xs-12 col-md-10 mtop5">
@@ -48,32 +49,38 @@
                 </div>
             </div>
             <div>
-            <table id="myTable" class="mtop5 table table-condensed " data-pagination="true" data-page-size="31"
-                data-page-list="[31]"
-                data-side-pagination="server" data-silent-sort="false">
-                <thead>
-                    <tr>
-                        <th data-sortable="true" data-align="center" data-field="Id">序号</th>
-                        <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="TeaCost">茶餐费
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LaborCost">
-                            人工费</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Freight">运费
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Postage">邮费
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="CartonCost">
-                            纸箱</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Consumables">
-                            小材</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
-                            data-field="PackingCharges">包装材料费</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"  data-field="Total">合计</th>
-                        <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
-                    </tr>
-                </thead>
-            </table>
+                <table id="myTable" class="mtop5 table table-condensed " data-pagination="true" data-page-size="31"
+                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false">
+                    <thead>
+                        <tr>
+                            <th data-sortable="true" data-align="center" data-field="Id">序号</th>
+                            <th data-sortable="true" data-align="center" data-field="Date">日期</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="TeaCost">
+                                茶餐费
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="LaborCost">
+                                人工费</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Freight">
+                                运费
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Postage">
+                                邮费
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="CartonCost">
+                                纸箱</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="Consumables">
+                                小材</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="PackingCharges">包装材料费</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">合计
+                            </th>
+                            <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
         <span id="titleInfo" class="hidden">运营成本</span>
@@ -105,8 +112,8 @@
                                         type="number" step="0.50" required />
                                 </div>
                                 <label for="Freight" class="col-sm-3 control-label">运费</label>
-                                <div class="col-sm-3"><input class="form-control" id="Freight" name="Freight" 
-                                    type="number" step="0.50" /></div>
+                                <div class="col-sm-3"><input class="form-control" id="Freight" name="Freight"
+                                        type="number" step="0.50" /></div>
                             </div>
                             <div class="form-group">
                                 <label for="Postage" class="col-sm-3 control-label">邮费</label>
@@ -119,11 +126,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="Consumables" class="col-sm-3 control-label">小材</label>
-                                <div class="col-sm-3"><input class="form-control" id="Consumables" name="Consumables" 
-                                    type="number" step="0.50" required /></div>
+                                <div class="col-sm-3"><input class="form-control" id="Consumables" name="Consumables"
+                                        type="number" step="0.50" required /></div>
                                 <label for="PackingCharges" class="col-sm-3 control-label">包装材料费</label>
-                                <div class="col-sm-3"><input class="form-control" id="PackingCharges" name="PackingCharges"
-                                     type="number" required step="0.50" /></div>
+                                <div class="col-sm-3"><input class="form-control" id="PackingCharges"
+                                        name="PackingCharges" type="number" required step="0.50" /></div>
                             </div>
                         </form>
                     </div>
@@ -168,13 +175,13 @@
                 $('#myModal #submitBtn').hide();
                 $('#myModal').modal();
             }).on('page-change.bs.table', function (e, number, size) {
-            condition.pageNumber = number;
-            condition.pageSize = size;
-            refreshData()
+                condition.pageNumber = number;
+                condition.pageSize = size;
+                refreshData()
             }).on('sort.bs.table', function (e, name, order) {
-            condition.sortName = name;
-            condition.sortOrder = order;
-            refreshData();
+                condition.sortName = name;
+                condition.sortOrder = order;
+                refreshData();
             });
             $.extend(condition, $('#myTable').bootstrapTable('getOptions'));
             refreshData();
@@ -236,7 +243,7 @@
                 $('#myModal').modal();
             },
             'click .delete': function (e, value, row, index) {
-                BootstrapDialog.confirm("确定删除记录?",async (result) => {
+                BootstrapDialog.confirm("确定删除记录?", async (result) => {
                     if (!result) {
                         return
                     }
@@ -249,7 +256,7 @@
                     } else {
                         BootstrapDialog.alert(r)
                         return
-                    }                
+                    }
                 });
             }
         };
@@ -342,9 +349,9 @@
             // console.log(record)                
             record.Id = parseInt(record.Id)
             record.Date = toDBDate(new Date(record.Date));
-            record.TeaCost=parseFloat(record.TeaCost);
-            record.LaborCost=parseFloat(record.LaborCost);
-            record.Freight=parseFloat(record.Freight);
+            record.TeaCost = parseFloat(record.TeaCost);
+            record.LaborCost = parseFloat(record.LaborCost);
+            record.Freight = parseFloat(record.Freight);
             record.Postage = parseFloat(record.Postage);
             record.CartonCost = parseFloat(record.CartonCost);
             record.Consumables = parseFloat(record.Consumables);

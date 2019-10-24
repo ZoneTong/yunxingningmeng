@@ -2,7 +2,7 @@
 <html lang="zh">
 
 <head>
-    <title>运兴合作社管理软件-财务统计</title>
+    <title>财务统计--运兴合作社管理软件</title>
     <link rel="shortcut icon" href="ningmeng.ico">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,11 +13,12 @@
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="common.css" rel="stylesheet">
     <style>
-        body{
-            align-items:inherit
+        body {
+            align-items: inherit
         }
     </style>
 </head>
+
 <body onload="tableUI()">
     <div class="container-fluid full">
         <div class="main_ui">
@@ -27,19 +28,19 @@
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
                 <div class="col-xs-4 col-md-1">
-                        <button class="btn btn-info form-control" type="button" title="统计今日" onclick="calcFinance(0);">
-                            <i class="glyphicon glyphicon-plus"></i>&nbsp;今日</button>
-                    
+                    <button class="btn btn-info form-control" type="button" title="统计今日" onclick="calcFinance(0);">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;今日</button>
+
                 </div>
                 <div class="col-xs-4 col-md-1">
-                        <button class="btn btn-info form-control" type="button" title="统计昨日" onclick="calcFinance(-1);">
-                            <i class="glyphicon glyphicon-pencil"></i>&nbsp;昨日</button>
-                    
+                    <button class="btn btn-info form-control" type="button" title="统计昨日" onclick="calcFinance(-1);">
+                        <i class="glyphicon glyphicon-pencil"></i>&nbsp;昨日</button>
+
                 </div>
                 <div class="col-xs-4 col-md-1">
-                        <button class="btn btn-info form-control" type="button" title="统计往期" data-toggle="modal"
-                            data-target="#myModal"><i class="glyphicon glyphicon-refresh"></i>&nbsp;往期</button>
-                    
+                    <button class="btn btn-info form-control" type="button" title="统计往期" data-toggle="modal"
+                        data-target="#myModal"><i class="glyphicon glyphicon-refresh"></i>&nbsp;往期</button>
+
                 </div>
 
                 <div class="col-xs-8 col-md-8 mtop5">
@@ -57,38 +58,41 @@
                     </div>
                 </div>
             </div>
-            
-            <div>
-            <table id="myTable" class="mtop5 table table-condensed" data-pagination="true" data-page-size="31" data-page-list="[31]"
-                data-side-pagination="server" data-silent-sort="false" >
-                <thead>
-                    <tr>
-                        <th data-sortable="true" data-align="center" data-visible="false" data-field="Id">序号</th>
-                        <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Purchase">采购费
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">销售费
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">成本
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="LastBalance">
-                            上日结余</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">金额</th>
 
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
-                            data-field="PurchasedStock">采购量
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
-                            data-field="SaledStock">销售量
-                        </th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
-                            data-field="LastStock">
-                            上日库存</th>
-                        <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
-                            data-field="TotalStock">库存</th>
-                    </tr>
-                </thead>
-            </table>
+            <div>
+                <table id="myTable" class="mtop5 table table-condensed" data-pagination="true" data-page-size="31"
+                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false">
+                    <thead>
+                        <tr>
+                            <th data-sortable="true" data-align="center" data-visible="false" data-field="Id">序号</th>
+                            <th data-sortable="true" data-align="center" data-field="Date">日期</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="Purchase">采购费
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Sale">销售费
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Cost">成本
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
+                                data-field="LastBalance">
+                                上日结余</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">金额
+                            </th>
+
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                                data-field="PurchasedStock">采购量
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                                data-field="SaledStock">销售量
+                            </th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                                data-field="LastStock">
+                                上日库存</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤"
+                                data-field="TotalStock">库存</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
         <span id="titleInfo" class="hidden">财务统计信息</span>
@@ -102,14 +106,16 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" id="myModalForm">
-                            <div class="hidden form-group"><input type="number" id="edit_status" name="edit_status" readonly
-                                    value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
+                            <div class="hidden form-group"><input type="number" id="edit_status" name="edit_status"
+                                    readonly value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
                             <div class="form-group">
                                 <label for="from" class="col-sm-3 control-label">起始日期</label>
-                                <div class="col-sm-3"><input class="form-control" id="from" name="from" type="date" required />
+                                <div class="col-sm-3"><input class="form-control" id="from" name="from" type="date"
+                                        required />
                                 </div>
-                                <label for="to"   class="col-sm-3 control-label">结束日期</label>
-                                <div class="col-sm-3"><input class="form-control" id="to" name="to" type="date" required />
+                                <label for="to" class="col-sm-3 control-label">结束日期</label>
+                                <div class="col-sm-3"><input class="form-control" id="to" name="to" type="date"
+                                        required />
                                 </div>
                             </div>
                         </form>
@@ -169,10 +175,10 @@
             });
             $.extend(condition, $('#myTable').bootstrapTable('getOptions'));
             refreshData();
-            
+
             let today = new Date();
-            $('#myModal #from').val( today.addDay(-10).toDateInputValue() );
-            $('#myModal #to').val( today.addDay(-1).toDateInputValue() );
+            $('#myModal #from').val(today.addDay(-10).toDateInputValue());
+            $('#myModal #to').val(today.addDay(-1).toDateInputValue());
         });
 
         // 表格
@@ -189,12 +195,12 @@
             } else {
                 $.each(r.rows, function (i, e) {
                     e.Purchase = floatRound(e.Purchase);
-                    e.Sale = floatRound( e.Sale);
-                    e.Cost= floatRound(e.Cost);
+                    e.Sale = floatRound(e.Sale);
+                    e.Cost = floatRound(e.Cost);
                     e.LastBalance = floatRound(e.LastBalance);
                     e.Total = floatRound(e.Total);
 
-                    e.PurchasedStock= floatRound(e.PurchasedStock);
+                    e.PurchasedStock = floatRound(e.PurchasedStock);
                     e.SaledStock = floatRound(e.SaledStock);
                     e.LastStock = floatRound(e.LastStock);
                     e.TotalStock = floatRound(e.TotalStock);
@@ -225,11 +231,11 @@
         }
         $('#searchKey').change(search);
 
-        const calcFinance = async(daydiff) => {
+        const calcFinance = async (daydiff) => {
             let date = new Date();
             date = date.addDay(daydiff);
             let r = await window.calcFinanceByPeriod(toDBDate(date), toDBDate(date));
-            if ( r == 'ok' ){
+            if (r == 'ok') {
                 search();
             } else {
                 BootstrapDialog.alert(r);
@@ -237,8 +243,7 @@
         }
 
         // 弹窗
-        function fillModal(r) {
-        }
+        function fillModal(r) {}
 
         $('#myModal').on('shown.bs.modal', function () {
             $('#myModal #Date').trigger('focus');
