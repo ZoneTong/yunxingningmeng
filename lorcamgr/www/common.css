@@ -17,7 +17,8 @@
 		}
 
 		.input-group .form-control.selectcss {
-			width:100px;
+			/* width:100px; */
+			width: fit-content;
 			padding:3px 10px;
 			border-top-left-radius: 5px;
 			border-bottom-left-radius: 5px;
@@ -29,9 +30,7 @@
 			-webkit-appearance:none;
 		}
 
-		.mtop5,
-		.col-xs-12 input,
-		.col-xs-12 button {
+		.mtop5 {
 			margin-top: 5px
 		}
 		.pad0{
