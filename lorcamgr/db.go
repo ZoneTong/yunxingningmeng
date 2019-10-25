@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -8,17 +9,19 @@ import (
 )
 
 var (
-	db orm.Ormer
+	dborm orm.Ormer
 )
 
 func init() {
 	// orm.RegisterDriver("sqlite3", orm.DRSqlite)
-	orm.RegisterDataBase("default", "sqlite3", "data.db")
+	err := orm.RegisterDataBase("default", "sqlite3", "data.db")
+	if err != nil {
+		log.Fatalln(err)
+	}
 	// orm.ResetModelCache()
 	orm.RegisterModelWithPrefix("t_", new(User), new(PurchaseRecord), new(SaleRecord), new(CostRecord), new(StockRecord), new(FinanceStatics))
-
-	db = orm.NewOrm()
-
+	orm.RunSyncdb("default", false, true)
+	dborm = orm.NewOrm()
 }
 
 type User struct {

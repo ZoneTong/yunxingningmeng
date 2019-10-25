@@ -10,7 +10,7 @@ import (
 func verifyPassword(account, password string) string {
 	u := new(User)
 	u.Name = account
-	err := db.Read(u, "Name")
+	err := dborm.Read(u, "Name")
 	if err != nil {
 		if err == orm.ErrNoRows {
 			return "账号不存在"
@@ -32,9 +32,9 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 	var err error
 	r.Total = r.CalcTotal()
 	if r.Id == 0 {
-		_, err = db.Insert(r)
+		_, err = dborm.Insert(r)
 	} else {
-		_, err = db.Update(r)
+		_, err = dborm.Update(r)
 	}
 
 	if err != nil {
@@ -44,7 +44,7 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 }
 
 func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
-	table := db.QueryTable(&PurchaseRecord{})
+	table := dborm.QueryTable(&PurchaseRecord{})
 
 	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
@@ -102,9 +102,9 @@ func searchPartial(table orm.QuerySeter, c SearchCondition) (newtable orm.QueryS
 
 func DelPurchaseRecord(id int) string {
 	r := PurchaseRecord{Id: id}
-	// _, err := db.Delete(&r)
+	// _, err := dborm.Delete(&r)
 	r.Deleted = 1
-	_, err := db.Update(&r, "Deleted")
+	_, err := dborm.Update(&r, "Deleted")
 	defer log.Println("DelPurchaseRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -117,9 +117,9 @@ func NewOrEditSaleRecord(r *SaleRecord) string {
 	var err error
 	r.Total = r.CalcTotal()
 	if r.Id == 0 {
-		_, err = db.Insert(r)
+		_, err = dborm.Insert(r)
 	} else {
-		_, err = db.Update(r)
+		_, err = dborm.Update(r)
 	}
 
 	if err != nil {
@@ -129,7 +129,7 @@ func NewOrEditSaleRecord(r *SaleRecord) string {
 }
 
 func SearchSaleRecords(c SearchCondition) (resp *Response) {
-	table := db.QueryTable(&SaleRecord{})
+	table := dborm.QueryTable(&SaleRecord{})
 	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	} else {
@@ -158,9 +158,9 @@ func SearchSaleRecords(c SearchCondition) (resp *Response) {
 
 func DelSaleRecord(id int) string {
 	r := SaleRecord{Id: id}
-	// _, err := db.Delete(&r)
+	// _, err := dborm.Delete(&r)
 	r.Deleted = 1
-	_, err := db.Update(&r, "Deleted")
+	_, err := dborm.Update(&r, "Deleted")
 	defer log.Println("DelSaleRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -173,9 +173,9 @@ func NewOrEditCostRecord(r *CostRecord) string {
 	var err error
 	r.Total = r.CalcTotal()
 	if r.Id == 0 {
-		_, err = db.Insert(r)
+		_, err = dborm.Insert(r)
 	} else {
-		_, err = db.Update(r)
+		_, err = dborm.Update(r)
 	}
 
 	if err != nil {
@@ -185,7 +185,7 @@ func NewOrEditCostRecord(r *CostRecord) string {
 }
 
 func SearchCostRecords(c SearchCondition) (resp *Response) {
-	table := db.QueryTable(&CostRecord{})
+	table := dborm.QueryTable(&CostRecord{})
 	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
@@ -212,9 +212,9 @@ func SearchCostRecords(c SearchCondition) (resp *Response) {
 
 func DelCostRecord(id int) string {
 	r := CostRecord{Id: id}
-	// _, err := db.Delete(&r)
+	// _, err := dborm.Delete(&r)
 	r.Deleted = 1
-	_, err := db.Update(&r, "Deleted")
+	_, err := dborm.Update(&r, "Deleted")
 	defer log.Println("DelCostRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -227,9 +227,9 @@ func NewOrEditStockRecord(r *StockRecord) string {
 	var err error
 	// r.Total = r.CalcTotal()
 	if r.Id == 0 {
-		_, err = db.Insert(r)
+		_, err = dborm.Insert(r)
 	} else {
-		_, err = db.Update(r)
+		_, err = dborm.Update(r)
 	}
 
 	if err != nil {
@@ -239,7 +239,7 @@ func NewOrEditStockRecord(r *StockRecord) string {
 }
 
 func SearchStockRecords(c SearchCondition) (resp *Response) {
-	table := db.QueryTable(&StockRecord{})
+	table := dborm.QueryTable(&StockRecord{})
 	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
@@ -266,9 +266,9 @@ func SearchStockRecords(c SearchCondition) (resp *Response) {
 
 func DelStockRecord(id int) string {
 	r := StockRecord{Id: id}
-	// _, err := db.Delete(&r)
+	// _, err := dborm.Delete(&r)
 	r.Deleted = 1
-	_, err := db.Update(&r, "Deleted")
+	_, err := dborm.Update(&r, "Deleted")
 	defer log.Println("DelStockRecord", id, err)
 	if err != nil {
 		return err.Error()
@@ -282,13 +282,13 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 	r.Total = r.CalcTotal()
 	r.TotalStock = r.CalcStock()
 	old := FinanceStatics{Date: r.Date}
-	_, _, err = db.ReadOrCreate(&old, "Date")
+	_, _, err = dborm.ReadOrCreate(&old, "Date")
 	if err != nil {
 		return err.Error()
 	}
 
 	r.Id = old.Id
-	_, err = db.Update(r)
+	_, err = dborm.Update(r)
 	if err != nil {
 		return err.Error()
 	}
@@ -297,7 +297,7 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 }
 
 func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
-	table := db.QueryTable(&FinanceStatics{})
+	table := dborm.QueryTable(&FinanceStatics{})
 	if c.SearchField == SEARCH_DATE {
 		table = table.Filter("date__icontains", c.SearchKey)
 	}
@@ -350,7 +350,7 @@ func CalcFinanceByDate(date string) string {
 	}
 
 	var pre_f = FinanceStatics{Date: predate}
-	err = db.Read(&pre_f, "Date")
+	err = dborm.Read(&pre_f, "Date")
 	// log.Println("FinanceStatics Read", err)
 	if err != nil && err != orm.ErrNoRows {
 		return err.Error()
