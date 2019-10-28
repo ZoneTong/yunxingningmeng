@@ -159,11 +159,6 @@
                     'LastStock': 6.7,
                     'TotalStock': 8.9,
                 }]
-            }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
-                row.edit_status = 0;
-                fillModal(row);
-                $('#myModal #submitBtn').hide();
-                $('#myModal').modal();
             }).on('page-change.bs.table', function (e, number, size) {
                 condition.pageNumber = number;
                 condition.pageSize = size;

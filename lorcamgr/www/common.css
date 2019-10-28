@@ -42,3 +42,15 @@
 		input[type=date].form-control {
 			padding-right: 15px;
 		}
+
+		/* .table-hover>thead>tr:hover>th, */
+		.table-hover>tbody>tr:hover>td {
+			background-color: #dee97e;
+		}
+		table th, table td {
+			font-size: 16px;
+		}
+		.modal label.control-label,
+		.modal input.form-control {
+			font-size: 18px;
+		}

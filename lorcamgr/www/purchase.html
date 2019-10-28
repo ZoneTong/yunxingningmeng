@@ -89,7 +89,7 @@
                                     readonly value="0" /> <input type="number" id="Id" name="Id" readonly /></div>
                             <div class="form-group">
                                 <label for="Date" class="col-sm-2 control-label">日期</label>
-                                <div class="col-sm-4"><input  type="date" class="form-control" id="Date" name="Date"
+                                <div class="col-sm-4"><input type="date" class="form-control" id="Date" name="Date"
                                         required /></div>
                                 <label for="Provider" class="col-sm-2 control-label">供应商名称</label>
                                 <div class="col-sm-4"><input class="form-control" id="Provider" name="Provider"
@@ -157,6 +157,17 @@
                     'Weight': 1.7,
                     'Price': 34.6,
                     'Total': 91.6
+                }, {
+                    'edit_status': 1,
+                    Id: 5,
+                    Date: '20021224',
+                    'Provider': '淘宝2',
+                    'Logistics': '菜鸟2',
+                    'Specifications': 'xiao件',
+                    'Number': 91,
+                    'Weight': 12.7,
+                    'Price': 3.6,
+                    'Total': 9.6
                 }]
             }).on('dbl-click-cell.bs.table', function (event, field, value, row) {
                 row.edit_status = 0;

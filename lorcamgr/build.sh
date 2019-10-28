@@ -11,11 +11,11 @@ cd `dirname $0`
 
 NOGEN=0
 OS=""
-while getopts 'no:' OPT; do
+while getopts 'ns:' OPT; do
     case $OPT in
         n)
         NOGEN=1;;
-        o)
+        s)
         OS=$OPTARG
         ;;
     esac
