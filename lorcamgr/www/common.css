@@ -13,7 +13,7 @@
 		    justify-content: center;
 		    background-color: #dff0d8;
 		    font-family: 'Helvetika Neue', Arial, sans-serif;
-		    font-size: 28px;
+		    /* font-size: 16px; */
 		}
 
 		.input-group .form-control.selectcss {
@@ -38,4 +38,7 @@
 		}
 		.full {
 			width: 100%;
+		}
+		input[type=date].form-control {
+			padding-right: 15px;
 		}
