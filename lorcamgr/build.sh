@@ -27,10 +27,11 @@ if [ "$NOGEN" == "0" ]; then
     go generate
 fi
 
+# ./build.sh -n -s win
 if [ "$OS" == "win" ] || [ "$OS" == "windows" ];then
     # 交叉编译 https://blog.csdn.net/tsxylhs/article/details/91852841
     # 首先 brew install mingw-w64 
-    CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H windowsgui -X main.TRIAL_DAY=21 -X 'main.BUILD_TIME=`date +%Y%m%d`'  "
+    CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H windowsgui -X main.TRIAL_DAY=21 -X 'main.BUILD_TIME=`date +%Y%m%d`'  " -o yunxing.exe
 
     # CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -x -v -ldflags "-s -w -H windowsgui -X main.TRIAL_DAY=2 -X 'main.BUILD_TIME=`date +%Y%m%d`'  " # 失败, gcc_libinit_windows.c:7:10: fatal error: 'windows.h' file not found
     # GOOS=windows GOARCH=amd64 go build -x -v -ldflags "-s -w -H windowsgui -X main.TRIAL_DAY=2 -X 'main.BUILD_TIME=`date +%Y%m%d`' "  #失败

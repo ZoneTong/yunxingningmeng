@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -8,6 +9,10 @@ import (
 )
 
 func verifyPassword(account, password string) string {
+	if hoursleft < 0 {
+		return fmt.Sprintf("试用期已过,请联系%s获取正式版", author)
+	}
+
 	u := new(User)
 	u.Name = account
 	err := dborm.Read(u, "Name")

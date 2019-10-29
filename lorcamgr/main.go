@@ -19,20 +19,19 @@ const (
 	loginUI = iota
 	menuUI
 	tableUI
+
+	author = `<a href="mailto:zhoutong.zht@gmail.com?cc=zhoutong.zht@foxmail.com&bcc=zhoutong.zht@gmail.com&subject=请求获取正式版&body=运兴柠檬请求获取正式版授权">作者</a>`
 )
 
 var (
 	TRIAL_DAY  = "2"
 	BUILD_TIME = "20191010"
+
+	hoursleft  float64
+	expireDate time.Time
 )
 
 func main() {
-	hoursleft := expireDate().Sub(time.Now()).Hours()
-	if hoursleft < 0 {
-		log.Fatalln("试用期已过,请联系作者zhoutong.zht@gmail.com ")
-		return
-	}
-
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
@@ -51,8 +50,8 @@ func main() {
 	ui.Bind("loginReady", func() {
 		if hoursleft < 24*3 {
 			ui.Eval(fmt.Sprintf(`
-				$('#expireInfo').removeClass('hide').html('该软件将在%s过期,请联系作者zhoutong.zht@gmail.com获取正式版');
-			`, expireDate().Format("2006/01/02 15:04:05")))
+				$('#expireInfo').removeClass('hide').html('该软件将在%s过期,请联系%s获取正式版');
+			`, expireDate.Format("2006/01/02 15:04:05"), author))
 		}
 	})
 
@@ -82,10 +81,10 @@ func main() {
 
 	ui.Bind("calcFinanceByPeriod", CalcFinanceByPeriod)
 	ui.Bind("searchFinanceStaticss", SearchFinanceStaticss)
+
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
 	// e.g: ui.Load("data:text/html," + url.PathEscape(html))
-
 	pageurl := fmt.Sprintf("http://%s", ln.Addr())
 	if curUI == tableUI {
 		pageurl += "/menu.html"
@@ -105,8 +104,9 @@ func main() {
 	log.Println("exiting...")
 }
 
-func expireDate() time.Time {
+func init() {
 	days, _ := strconv.ParseInt(TRIAL_DAY, 10, 0)
 	since, _ := time.Parse("20060102", BUILD_TIME)
-	return since.AddDate(0, 0, int(days))
+	expireDate = since.AddDate(0, 0, int(days))
+	hoursleft = expireDate.Sub(time.Now()).Hours()
 }
