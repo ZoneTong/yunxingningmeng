@@ -55,3 +55,10 @@ function _roundFloat(number, precision) {
 function floatRound(number) {
 	return _roundFloat(number, 4)
 }
+
+$('a[href$=html]').each(function () {
+	$(this).attr('val', $(this).attr('href')).attr('href','javascript:;').on('click', function () {
+		var url = $(this).attr('val');
+		window.location.href = url;
+	}) ;
+});
