@@ -5,7 +5,7 @@
 */*/*.DS_Store
 */*.exe
 */*/*.exe
-lorcamgr/lorcamgr*
-lorcamgr/yunxingmgr/
-lorcamgr/data.db
-lorcamgr/*/data.db
+yunxing*
+yunxingmgr/yunxing*
+data.db
+*/data.db

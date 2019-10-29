@@ -3,12 +3,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -20,18 +22,26 @@ const (
 	menuUI
 	tableUI
 
-	author = `<a href="mailto:zhoutong.zht@gmail.com?cc=zhoutong.zht@foxmail.com&bcc=zhoutong.zht@gmail.com&subject=请求获取正式版&body=运兴柠檬请求获取正式版授权">作者</a>`
+	TIP_HOURS = 24 * 5
+	author    = `<a href="mailto:zhoutong.zht@gmail.com?cc=zhoutong.zht@foxmail.com&bcc=zhoutong.zht@gmail.com&subject=请求获取正式版&body=运兴柠檬请求获取正式版授权">作者</a>`
 )
 
 var (
-	TRIAL_DAY  = "2"
-	BUILD_TIME = "20191010"
+	trialday  = "2"
+	builddate = "20191010"
 
 	hoursleft  float64
 	expireDate time.Time
 )
 
 func main() {
+	version := flag.Bool("v", false, "version")
+	flag.Parse()
+	if *version {
+		fmt.Printf("%s, %s\n%s built, %s expire\n", runtime.Version(), author, builddate, expireDate.Format("2006/01/02 15:04:05"))
+		return
+	}
+
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +58,7 @@ func main() {
 	defer ui.Close() // 因为循环可能关闭多次
 
 	ui.Bind("loginReady", func() {
-		if hoursleft < 24*3 {
+		if hoursleft < TIP_HOURS {
 			ui.Eval(fmt.Sprintf(`
 				$('#expireInfo').removeClass('hide').html('该软件将在%s过期,请联系%s获取正式版');
 			`, expireDate.Format("2006/01/02 15:04:05"), author))
@@ -105,8 +115,8 @@ func main() {
 }
 
 func init() {
-	days, _ := strconv.ParseInt(TRIAL_DAY, 10, 0)
-	since, _ := time.Parse("20060102", BUILD_TIME)
+	days, _ := strconv.ParseInt(trialday, 10, 0)
+	since, _ := time.Parse("20060102", builddate)
 	expireDate = since.AddDate(0, 0, int(days))
 	hoursleft = expireDate.Sub(time.Now()).Hours()
 }

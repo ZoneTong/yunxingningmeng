@@ -20,7 +20,7 @@ func init() {
 	}
 	// orm.ResetModelCache()
 	orm.RegisterModelWithPrefix("t_", new(User), new(PurchaseRecord), new(SaleRecord), new(CostRecord), new(StockRecord), new(FinanceStatics))
-	orm.RunSyncdb("default", false, true)
+	orm.RunSyncdb("default", false, false)
 	dborm = orm.NewOrm()
 }
 
