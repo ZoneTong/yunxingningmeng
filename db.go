@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -14,7 +16,8 @@ var (
 
 func init() {
 	// orm.RegisterDriver("sqlite3", orm.DRSqlite)
-	err := orm.RegisterDataBase("default", "sqlite3", "data.db")
+	dbfile := filepath.Join(filepath.Dir(os.Args[0]), "data.db") // macos app 访问文件必须用路径; 否则,编译的可执行程序能打开,但打包成app后,app双击打开立即闪退.
+	err := orm.RegisterDataBase("default", "sqlite3", dbfile)
 	if err != nil {
 		log.Fatalln(err)
 	}

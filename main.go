@@ -22,13 +22,13 @@ const (
 	menuUI
 	tableUI
 
-	TIP_HOURS = 24 * 5
+	TIP_HOURS = 24 * 6
 	author    = `<a href="mailto:zhoutong.zht@gmail.com?cc=zhoutong.zht@foxmail.com&bcc=zhoutong.zht@gmail.com&subject=请求获取正式版&body=运兴柠檬请求获取正式版授权">作者</a>`
 )
 
 var (
-	trialday  = "2"
-	builddate = "20191010"
+	trialday  = "5"
+	builddate = "20191110"
 
 	hoursleft  float64
 	expireDate time.Time

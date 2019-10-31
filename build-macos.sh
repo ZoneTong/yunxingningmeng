@@ -1,21 +1,31 @@
 #!/bin/sh
 
 APP="Yunxing.app"
-mkdir -p $APP/Contents/{MacOS,Resources}
-go build -o $APP/Contents/MacOS/lorca-yunxing -ldflags "-X main.trialday=30 -X 'main.builddate=`date +%Y%m%d`' "
+exe="yunxing"
+mkdir -p $APP/Contents/{MacOS,Resources,Frameworks}
+# go build -o $exe -ldflags '-linkmode "external" -extldflags "-static"'  .
+go build -o $exe  .
+mv $exe $APP/Contents/MacOS/$exe
+
+# install_name_tool -add_rpath @loader_path/../Frameworks $APP/Contents/MacOS/$exe
+# # install_name_tool -change @rpath/libsqlite3.dylib @loader_path/libsqlite3.dylib $APP/Contents/MacOS/$exe
+# install_name_tool -id @executable_path/../Frameworks/libsqlite3.dylib libsqlite3.dylib
+# install_name_tool -change /usr/lib/libsqlite3.dylib @executable_path/../Frameworks/libsqlite3.dylib $exe
+
+cp icons/data.db.bak $APP/Contents/MacOS/data.db
+cp docs/ningmeng.icns $APP/Contents/Resources/ningmeng.icns
 cat > $APP/Contents/Info.plist << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>lorca-yunxing</string>
+	<string>yunxing</string>
 	<key>CFBundleIconFile</key>
-	<string>icon.icns</string>
+	<string>ningmeng.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.zserge.lorca.yunxing</string>
+	<string>com.zht.yunxing</string>
 </dict>
 </plist>
 EOF
-cp icons/icon.icns $APP/Contents/Resources/icon.icns
 find $APP
