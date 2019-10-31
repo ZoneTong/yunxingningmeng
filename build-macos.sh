@@ -1,18 +1,18 @@
 #!/bin/sh
 
-APP="Yunxing.app"
+APP="macYunxing.app"
 exe="yunxing"
 mkdir -p $APP/Contents/{MacOS,Resources,Frameworks}
 # go build -o $exe -ldflags '-linkmode "external" -extldflags "-static"'  .
-go build -o $exe  .
-mv $exe $APP/Contents/MacOS/$exe
+go build  .
+mv yunxingningmeng $APP/Contents/MacOS/$exe
 
 # install_name_tool -add_rpath @loader_path/../Frameworks $APP/Contents/MacOS/$exe
 # # install_name_tool -change @rpath/libsqlite3.dylib @loader_path/libsqlite3.dylib $APP/Contents/MacOS/$exe
 # install_name_tool -id @executable_path/../Frameworks/libsqlite3.dylib libsqlite3.dylib
 # install_name_tool -change /usr/lib/libsqlite3.dylib @executable_path/../Frameworks/libsqlite3.dylib $exe
 
-cp icons/data.db.bak $APP/Contents/MacOS/data.db
+cp windows/data.db.bak $APP/Contents/MacOS/data.db
 cp docs/ningmeng.icns $APP/Contents/Resources/ningmeng.icns
 cat > $APP/Contents/Info.plist << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -28,4 +28,5 @@ cat > $APP/Contents/Info.plist << EOF
 </dict>
 </plist>
 EOF
-find $APP
+# find $APP
+echo $APP over
