@@ -11,7 +11,7 @@ function pack(){
     mv -f macYunxing.app yunxingWinMac/
     mv winYunxing`date +%Y%m%d`.zip  yunxingWinMac/
     mv -f yunxingWinMac.zip yunxingWinMac.bak.zip
-    zip -m -q -r yunxingWinMac.zip  yunxingWinMac
+    # zip -m -q -r yunxingWinMac.zip  yunxingWinMac
     # rm -rf yunxingWinMac
     echo pack end
 }
