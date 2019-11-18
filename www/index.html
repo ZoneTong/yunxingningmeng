@@ -64,14 +64,13 @@
 
 		const login = document.querySelector('#login');
 		login.addEventListener('click', async () => {
-			let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector(
-				'#password').value);
+			// let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector('#password').value);
 			// console.log(r);
-			if (r == "ok") {
+			// if (r == "ok") {
 				window.location.href = 'menu.html';
-			} else {
-				BootstrapDialog.alert(r);
-			}
+			// } else {
+				// BootstrapDialog.alert(r);
+			// }
 		});
 	</script>
 </body>
