@@ -1,4 +1,13 @@
 # SHELL := /bin/csh
+mac:
+	./buildx.sh 
+win:
+	./buildx.sh -n -s win
+pack:
+	./buildx.sh -n -s pack
+
+all: pack
+
 aar:
 	xgo --targets=android-16/*  .   
 	unzip -d android/aar yunxingningmeng-android-16.aar
@@ -6,13 +15,11 @@ aar:
 
 so:
 	# xgo --targets=android-16/arm -buildmode=c-shared  .
-	xgo --targets=linux/arm64,linux/arm -buildmode=c-shared  .
+	xgo --targets=linux/arm64,linux/arm,linux/amd64,linux/386 -buildmode=c-shared  .
 	cp yunxingningmeng-linux-arm-5.h 	android/jni/armeabi-v7a/yunxingningmeng.h
 	cp yunxingningmeng-linux-arm-5.so 	android/jni/armeabi-v7a/libyunxingningmeng.so
 	cp yunxingningmeng-linux-arm64.h 	android/jni/arm64-v8a/yunxingningmeng.h
 	cp yunxingningmeng-linux-arm64.so 	android/jni/arm64-v8a/libyunxingningmeng.so
-
-	xgo --targets=linux/amd64,linux/386 -buildmode=c-shared  .
 	cp yunxingningmeng-linux-386.h 		android/jni/x86/yunxingningmeng.h
 	cp yunxingningmeng-linux-386.so 	android/jni/x86/libyunxingningmeng.so
 	cp yunxingningmeng-linux-amd64.h 	android/jni/x86_64/yunxingningmeng.h
@@ -32,4 +39,4 @@ android: # CGO_ENABLED=1 GOOS=android PATH=$(PATH):$(ANDROID_NDK_ROOT)/toolchain
 
 
 clean:
-	rm -f *.o *.a *.so
+	rm -f *.o *.a *.so yunxingningmeng*
