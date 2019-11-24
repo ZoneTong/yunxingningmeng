@@ -9,7 +9,7 @@ import (
 )
 
 func TestDB(t *testing.T) {
-	// orm.RunSyncdb("default", false, true)
+	orm.RunSyncdb("default", true, true)
 	o := orm.NewOrm()
 	o.Using("default") // 默认使用 default，你可以指定为其他数据库
 
