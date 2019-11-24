@@ -38,16 +38,19 @@
 						id="expireInfo">过期警告</div>
 				</div>
 			</div>
+			<div id='status'></div>
 		</div>
 	</div>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-dialog.min.js"></script>
+	<script src="js/bluebird.min.js"></script>
 	<script src="common.js"></script>
 	<script>
 		$(document).ready(function () {
 			$('#account').trigger('focus');
+			initdb();
 		});
 
 		$("#account").keydown(function () {
@@ -64,13 +67,13 @@
 
 		const login = document.querySelector('#login');
 		login.addEventListener('click', async () => {
-			// let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector('#password').value);
-			// console.log(r);
-			// if (r == "ok") {
+			let r = await window.verifyPassword(document.querySelector('#account').value, document.querySelector('#password').value);
+			console.log(r);
+			if (r == "ok") {
 				window.location.href = 'menu.html';
-			// } else {
-				// BootstrapDialog.alert(r);
-			// }
+			} else {
+				BootstrapDialog.alert(r);
+			}
 		});
 	</script>
 </body>

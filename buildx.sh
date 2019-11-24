@@ -50,8 +50,11 @@ done
 shift $((OPTIND-1))
 
 if [ "$NOGEN" == "0" ]; then
+    echo go generate 
     # go run -tags generate gen.go
-    go generate
+    cd ui && mv ../www/unpackage ..
+    go generate 
+    mv ../unpackage ../www/ && cd -
 fi
 
 # ./build.sh -n -s win
@@ -60,7 +63,8 @@ if [ "$OS" == "win" ] || [ "$OS" == "windows" ];then
 elif [ "$OS" == "pack" ]; then
     pack
 else
-    go build -ldflags "-X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`' " -o yunxing
-    ./yunxing -v
-    ./yunxing
+    echo go build
+    go build -ldflags "-X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`' " -o yunxingningmeng .
+    ./yunxingningmeng -v
+    ./yunxingningmeng
 fi
