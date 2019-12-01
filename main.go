@@ -28,7 +28,7 @@ const (
 
 var (
 	trialday  = "5"
-	builddate = "20191110"
+	builddate = "20191130"
 
 	hoursleft  float64
 	expireDate time.Time
