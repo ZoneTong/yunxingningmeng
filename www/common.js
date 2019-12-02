@@ -42,14 +42,8 @@ Date.prototype.addDay = (function (n) {
 
 function toDBDate(d ){
 	let year = d.getFullYear(); //获取完整的年份(4位,1970-????)
-	let month = d.getMonth() + 1 +''; //获取当前月份(0-11,0代表1月)
-	if (month.length < 2){
-		month = '0'+month;
-	}
-	let day = d.getDate() +''; //获取当前日(1-31)
-	if (day.length < 2){
-		day = '0'+day;
-	}
+	let month = (d.getMonth() + 1 + '').padStart(2, '0'); //获取当前月份(0-11,0代表1月)
+	let day = (d.getDate() + '').padStart(2, '0'); //获取当前日(1-31)
 	return year+month+day;
 }
 
