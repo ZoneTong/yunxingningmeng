@@ -23,30 +23,32 @@
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row" id="toolbar">
-                <div class="col-xs-6 col-md-1 mtop5">
+                <div class="col-xs-6 col-md-2 mtop5">
                     <a class="btn btn-info form-control " href="menu.html"> <i
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
-                <div class="col-xs-6 col-md-1 mtop5">
+                <div class="col-xs-6 col-md-2 mtop5">
                     <button class="btn btn-info form-control" type="button" data-toggle="modal"
                         data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
                 </div>
 
-                <div class="col-xs-12 col-md-10 mtop5 ">
-                    <div class="input-group">
-                        <div class="input-group-btn ">
-                            <select class="form-control selectcss" id="searchField">
-                                <option value=0>日期</option>
-                                <option value=2>客户</option>
-                            </select>
-                        </div>
-                        <input class="form-control" type="text" placeholder="日期" id="searchKey" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-info" type="button" onclick="search();"><span
-                                    class="glyphicon glyphicon-search"></span></button>
-                        </span>
-                    </div>
+                <div class="col-xs-4 col-md-3 mtop5 rpad0">
+                    <label class="sr-only" for="searchKeyDate"">日期</label>
+                                    <input class=" form-control rbr0" id="searchKeyDate" type="text" name="date"
+                        placeholder="日期, 例如: 201912">
                 </div>
+                <div class="col-xs-6 col-md-4 mtop5 lpad0 rpad0 ">
+                    <label class="sr-only" for="searchKeyProvider">客户名称</label>
+                    <input class="form-control lbr0 rbr0" id="searchKeyProvider" type="text" name="provider"
+                        placeholder="客户名称">
+                </div>
+
+                <div class="col-xs-2 col-md-1 mtop5 lpad0 ">
+                    <button class="btn btn-info form-control lbr0" type="button" onclick="search();">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+
             </div>
             <div>
                 <table id="myTable" class="mtop5 table table-condensed" data-pagination="true" data-page-size="31"
@@ -195,8 +197,7 @@
 
         // 表格
         var condition = {
-            searchField: 0,
-            searchKey: '',
+        searchKeys: new Array(2),
         };
         const refreshData = async () => {
             let r = await window.searchSaleRecords(condition);
@@ -248,27 +249,13 @@
             }
         };
 
-        $('#searchField').change(function () {
-            // $('#searchKey').attr('placeholder', $('#searchField').find("option:selected").text() );
-            condition.searchField = parseInt($('#searchField').val());
-            switch (condition.searchField) {
-                case 0:
-                    $('#searchKey').attr('placeholder', '201910');
-                    break;
-
-                default:
-                    $('#searchKey').attr('placeholder', $('#searchField').find("option:selected").text());
-                    break;
-            }
-
-            search();
-        })
-
         function search() {
-            condition.searchKey = $('#searchKey').val();
+        condition.searchKeys[0] = $('#searchKeyDate').val();
+        condition.searchKeys[1] = $('#searchKeyProvider').val();
             refreshData();
         }
-        $('#searchKey').change(search);
+        $('#searchKeyDate').change(search);
+        $('#searchKeyProvider').change(search);
 
         // 弹窗
         function fillModal(r) {

@@ -209,7 +209,7 @@
         // 表格
         var condition = {
             searchField: 0,
-            searchKey: '',
+            searchKeys: new Array(1),
         };
         const refreshData = async () => {
             let r = await window.searchCostRecords(condition);
@@ -278,7 +278,7 @@
         })
 
         function search() {
-            condition.searchKey = $('#searchKey').val();
+            condition.searchKeys[0] = $('#searchKey').val();
             refreshData();
         }
         $('#searchKey').change(search);
