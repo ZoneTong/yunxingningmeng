@@ -36,6 +36,12 @@
 		.pad0{
 			padding: 0px;
 		}
+		.lpad0{
+			padding-left: 0px;
+		}
+		.rpad0{
+			padding-right: 0px;
+		}
 		.full {
 			width: 100%;
 		}
@@ -53,4 +59,13 @@
 		.modal label.control-label,
 		.modal input.form-control {
 			font-size: 18px;
+		}
+
+		.lbr0{
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+		.rbr0{
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
 		}

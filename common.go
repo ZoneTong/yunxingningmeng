@@ -15,12 +15,12 @@ const (
 )
 
 type SearchCondition struct {
-	SearchField int    `json:"searchField"`
-	SearchKey   string `json:"searchKey"`
-	PageNumber  int    `json:"pageNumber"`
-	PageSize    int    `json:"pageSize"`
-	SortName    string `json:"sortName"`
-	SortOrder   string `json:"sortOrder"` // desc asc
+	SearchField int      `json:"searchField"`
+	SearchKeys  []string `json:"searchKeys"`
+	PageNumber  int      `json:"pageNumber"`
+	PageSize    int      `json:"pageSize"`
+	SortName    string   `json:"sortName"`
+	SortOrder   string   `json:"sortOrder"` // desc asc
 }
 
 type Response struct {

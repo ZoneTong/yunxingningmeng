@@ -51,10 +51,11 @@ func NewOrEditPurchaseRecord(r *PurchaseRecord) string {
 func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 	table := dborm.QueryTable(&PurchaseRecord{})
 
-	if c.SearchField == SEARCH_DATE {
-		table = table.Filter("date__icontains", c.SearchKey)
-	} else {
-		table = table.Filter("provider__icontains", c.SearchKey)
+	if c.SearchKeys[0] != "" {
+		table = table.Filter("date__icontains", c.SearchKeys[0])
+	}
+	if c.SearchKeys[1] != "" {
+		table = table.Filter("provider__icontains", c.SearchKeys[1])
 	}
 
 	var rows []*PurchaseRecord
@@ -135,10 +136,11 @@ func NewOrEditSaleRecord(r *SaleRecord) string {
 
 func SearchSaleRecords(c SearchCondition) (resp *Response) {
 	table := dborm.QueryTable(&SaleRecord{})
-	if c.SearchField == SEARCH_DATE {
-		table = table.Filter("date__icontains", c.SearchKey)
-	} else {
-		table = table.Filter("customer__icontains", c.SearchKey)
+	if c.SearchKeys[0] != "" {
+		table = table.Filter("date__icontains", c.SearchKeys[0])
+	}
+	if c.SearchKeys[1] != "" {
+		table = table.Filter("customer__icontains", c.SearchKeys[1])
 	}
 
 	var rows []*SaleRecord
@@ -191,8 +193,8 @@ func NewOrEditCostRecord(r *CostRecord) string {
 
 func SearchCostRecords(c SearchCondition) (resp *Response) {
 	table := dborm.QueryTable(&CostRecord{})
-	if c.SearchField == SEARCH_DATE {
-		table = table.Filter("date__icontains", c.SearchKey)
+	if c.SearchKeys[0] != "" {
+		table = table.Filter("date__icontains", c.SearchKeys[0])
 	}
 
 	var rows []*CostRecord
@@ -245,8 +247,8 @@ func NewOrEditStockRecord(r *StockRecord) string {
 
 func SearchStockRecords(c SearchCondition) (resp *Response) {
 	table := dborm.QueryTable(&StockRecord{})
-	if c.SearchField == SEARCH_DATE {
-		table = table.Filter("date__icontains", c.SearchKey)
+	if c.SearchKeys[0] != "" {
+		table = table.Filter("date__icontains", c.SearchKeys[0])
 	}
 
 	var rows []*StockRecord
@@ -303,8 +305,8 @@ func newOrEditFinanceStatics(r *FinanceStatics) string {
 
 func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
 	table := dborm.QueryTable(&FinanceStatics{})
-	if c.SearchField == SEARCH_DATE {
-		table = table.Filter("date__icontains", c.SearchKey)
+	if c.SearchKeys[0] != "" {
+		table = table.Filter("date__icontains", c.SearchKeys[0])
 	}
 
 	var rows []*FinanceStatics
@@ -331,7 +333,7 @@ func CalcFinanceByDate(date string) string {
 	r := FinanceStatics{Date: date}
 	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
-	c := SearchCondition{SearchField: SEARCH_DATE, SearchKey: date}
+	c := SearchCondition{SearchField: SEARCH_DATE, SearchKeys: []string{date, ""}}
 	resp = SearchPurchaseRecords(c)
 	for _, row := range resp.Rows.([]*PurchaseRecord) {
 		r.Purchase += row.Total
