@@ -8,10 +8,12 @@ function pack(){
     buildwin
     mkdir -p yunxingWinMac
     cp docs/运兴合作社管理软件使用说明书.docx yunxingWinMac/
-    mv -f macYunxing.app yunxingWinMac/
+    
+    rm -rf yunxingWinMac/macYunxing`date +%Y%m%d`.app
+    mv -f macYunxing.app yunxingWinMac/macYunxing`date +%Y%m%d`.app
     mv winYunxing`date +%Y%m%d`.zip  yunxingWinMac/
-    mv -f yunxingWinMac.zip yunxingWinMac.bak.zip
-    # zip -m -q -r yunxingWinMac.zip  yunxingWinMac
+    # mv -f yunxingWinMac`date +%Y%m%d`.zip yunxingWinMac.bak.zip
+    # zip -rq yunxingWinMac.zip  yunxingWinMac
     # rm -rf yunxingWinMac
     echo pack end
 }
@@ -34,14 +36,28 @@ function buildwin(){
     echo $APP over
 }
 
+function nostaticGenAssets(){
+    echo gen assets.go
+    # 此时不生成静态库
+    mkdir -p static
+    mv -f www/css www/fonts www/js www/less www/ningmeng.ico static/
+
+    # go run -tags generate gen.go
+    go generate
+
+    mv -f static/* www/
+}
+
 cd `dirname $0`
 
-NOGEN=0
+GEN=0
 OS=""
-while getopts 'ns:' OPT; do
+while getopts 'g:s:' OPT; do
     case $OPT in
-        n)
-        NOGEN=1;;
+        g)
+        GEN=$OPTARG
+        # echo $OPTARG
+        ;;
         s)
         OS=$OPTARG
         ;;
@@ -49,18 +65,31 @@ while getopts 'ns:' OPT; do
 done
 shift $((OPTIND-1))
 
-if [ "$NOGEN" == "0" ]; then
-    # go run -tags generate gen.go
+# 平常调试界面: ./buildx.sh 或 ./buildx.sh -g 1
+# 添加依赖库: ./buildx.sh -g 2
+# 不编译界面: ./buildx.sh -g 0
+if [ "$GEN" == "0" ]; then
+    echo no gen assets.go
+elif [ "$GEN" == "1" ] || [ "$GEN" == "" ]; then
+    nostaticGenAssets
+else   # 重新生成依赖库资源文件
+    echo gen static.go
     go generate
+    echo "package main"     > static.go
+    echo                    >> static.go
+    echo "func init() {"    >> static.go
+    grep ".ico\|/js/\|/css/" assets.go >> static.go
+    echo "}"                >> static.go
+    nostaticGenAssets
 fi
 
-# ./build.sh -n -s win
+# ./build.sh -g 0 -s win
 if [ "$OS" == "win" ] || [ "$OS" == "windows" ];then
     buildwin
 elif [ "$OS" == "pack" ]; then
     pack
 else
-    go build -ldflags "-X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`' " -o yunxing
-    ./yunxing -v
-    ./yunxing
+    go build -ldflags "-X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`' " -o yunxingningmeng
+    ./yunxingningmeng -v
+    ./yunxingningmeng
 fi
