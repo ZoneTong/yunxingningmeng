@@ -40,7 +40,7 @@ function nostaticGenAssets(){
     echo gen assets.go
     # 此时不生成静态库
     mkdir -p static
-    mv -f www/css www/fonts www/js www/less www/ningmeng.ico static/
+    mv -f www/css www/fonts www/js www/less www/ningmeng.ico www/excel.png static/
 
     # go run -tags generate gen.go
     go generate
@@ -50,7 +50,7 @@ function nostaticGenAssets(){
 
 cd `dirname $0`
 
-GEN=0
+GEN=""
 OS=""
 while getopts 'g:s:' OPT; do
     case $OPT in
@@ -78,7 +78,7 @@ else   # 重新生成依赖库资源文件
     echo "package main"     > static.go
     echo                    >> static.go
     echo "func init() {"    >> static.go
-    grep ".ico\|/js/\|/css/" assets.go >> static.go
+    grep ".ico\|.png\|/js/\|/css/" assets.go >> static.go
     echo "}"                >> static.go
     nostaticGenAssets
 fi

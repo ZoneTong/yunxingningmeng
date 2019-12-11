@@ -10,6 +10,7 @@ import (
 
 const (
 	SEARCH_MAX_COUNT = 10000
+	INIT_MIN_DATE    = "99991229"
 )
 
 func verifyPassword(account, password string) string {
@@ -63,7 +64,7 @@ func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 	}
 
 	var static PurchaseRecord
-	min_date := "99991229"
+	min_date := INIT_MIN_DATE
 	var max_date string
 
 	var rows []*PurchaseRecord
@@ -85,6 +86,9 @@ func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 	log.Println("SearchPurchaseRecords Total count:", resp.Total, len(rows), rows[0])
 
 	// 统计
+	if c.nostatics {
+		return
+	}
 	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
 		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
 		if err != nil {
@@ -179,7 +183,7 @@ func SearchSaleRecords(c SearchCondition) (resp *Response) {
 	}
 
 	var static SaleRecord
-	min_date := "99991229"
+	min_date := INIT_MIN_DATE
 	var max_date string
 
 	var rows []*SaleRecord
@@ -201,6 +205,9 @@ func SearchSaleRecords(c SearchCondition) (resp *Response) {
 	log.Println("SearchSaleRecords Total count:", resp.Total, len(rows), rows[0])
 
 	// 统计
+	if c.nostatics {
+		return
+	}
 	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
 		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
 		if err != nil {
@@ -262,7 +269,7 @@ func SearchCostRecords(c SearchCondition) (resp *Response) {
 	}
 
 	var static CostRecord
-	min_date := "99991229"
+	min_date := INIT_MIN_DATE
 	var max_date string
 
 	var rows []*CostRecord
@@ -284,6 +291,9 @@ func SearchCostRecords(c SearchCondition) (resp *Response) {
 	log.Println("SearchCostRecords Total count:", resp.Total, len(rows), rows[0])
 
 	// 统计
+	if c.nostatics {
+		return
+	}
 	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
 		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
 		if err != nil {
@@ -433,7 +443,7 @@ func CalcFinanceByDate(date string) string {
 	r := FinanceStatics{Date: date}
 	defer log.Println("CalcFinanceByDate", r)
 	var resp *Response
-	c := SearchCondition{SearchField: SEARCH_DATE, SearchKeys: []string{date, ""}}
+	c := SearchCondition{SearchKeys: []string{date, ""}}
 	resp = SearchPurchaseRecords(c)
 	if resp.Rows != nil {
 		for _, row := range resp.Rows.([]*PurchaseRecord) {
@@ -497,4 +507,37 @@ func CalcFinanceByPeriod(from, to string) (errstr string) {
 	}
 
 	return
+}
+
+func DownloadExcel(table string, c SearchCondition, i18nColumns [][]string) string {
+	c.nostatics = true
+	c.PageSize = 0
+	var resp *Response
+	switch table {
+	case "采购":
+		resp = SearchPurchaseRecords(c)
+	case "销售":
+		resp = SearchSaleRecords(c)
+	case "成本":
+		resp = SearchCostRecords(c)
+	case "财务":
+		resp = SearchFinanceStaticss(c)
+	}
+
+	if resp.Rows == nil {
+		return "记录为空"
+	}
+
+	fileds, zhs := make([]string, 0, len(i18nColumns)), make([]string, 0, len(i18nColumns))
+	for _, pair := range i18nColumns {
+		fileds = append(fileds, pair[0])
+		zhs = append(zhs, pair[1])
+	}
+
+	rows := reflectRowsValues(resp.Rows, fileds)
+	err := saveExcel(genpath(table, c.SearchKeys...), rows, zhs)
+	if err != nil {
+		return err.Error()
+	}
+	return "ok"
 }

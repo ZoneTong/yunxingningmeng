@@ -33,12 +33,17 @@
 
                 </div>
 
-                <div class="col-xs-4 col-md-3 mtop5 rpad0">
+                <div class="col-xs-2 col-md-1 mtop5 rpad0">
+                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent" onclick="download()"><img
+                            src="excel.png" height="100%"></img>
+                    </button>
+                </div>
+                <div class="col-xs-3 col-md-3 mtop5 lpad0 rpad0">
                     <label class="sr-only" for="searchKeyDate"">日期</label>
                     <input class=" form-control rbr0" id="searchKeyDate" type="text" name="date"
                         placeholder="日期, 例如: 201912">
                 </div>
-                <div class="col-xs-6 col-md-4 mtop5 lpad0 rpad0 ">
+                <div class="col-xs-5 col-md-3 mtop5 lpad0 rpad0 ">
                     <label class="sr-only" for="searchKeyProvider">供应商</label>
                     <input class="form-control lbr0 rbr0" id="searchKeyProvider" type="text" name="provider"
                         placeholder="供应商">
@@ -152,6 +157,27 @@
     <script>
         // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
         ;
+        const download = async () => {
+            condition.searchKeys[0] = $('#searchKeyDate').val();
+            condition.searchKeys[1] = $('#searchKeyProvider').val();
+            let table = '采购'
+            let r = await window.downloadExcel(table, condition, [
+                ['Id', '编号'],
+                ['Date', '日期'],
+                ['Provider', '供应商']
+            ]);
+            if (r == 'ok') {
+                let dlg = BootstrapDialog.show({
+                    message: `下载 ${table}_${condition.searchKeys[0]}_${condition.searchKeys[1]}.xlsx 成功`,
+                });
+                setTimeout(function () {
+                    dlg.close();
+                }, 5000);
+            } else {
+                BootstrapDialog.alert(r);
+            }
+        }
+
         let TableStatic = {
             // Id: 7,
             // Date: '20021223-<br/>20021224',
@@ -280,7 +306,7 @@
                         return
                     }
                     let r = await window.delPurchaseRecord(row.Id)
-                    if (r == "ok") {                        
+                    if (r == "ok") {
                         refreshData()
                     } else {
                         BootstrapDialog.alert(r)

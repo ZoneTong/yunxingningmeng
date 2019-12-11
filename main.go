@@ -85,12 +85,13 @@ func main() {
 	ui.Bind("newOrEditCostRecord", NewOrEditCostRecord)
 	ui.Bind("delCostRecord", DelCostRecord)
 
-	ui.Bind("searchStockRecords", SearchStockRecords)
-	ui.Bind("newOrEditStockRecord", NewOrEditStockRecord)
-	ui.Bind("delStockRecord", DelStockRecord)
+	// ui.Bind("searchStockRecords", SearchStockRecords)
+	// ui.Bind("newOrEditStockRecord", NewOrEditStockRecord)
+	// ui.Bind("delStockRecord", DelStockRecord)
 
 	ui.Bind("calcFinanceByPeriod", CalcFinanceByPeriod)
 	ui.Bind("searchFinanceStaticss", SearchFinanceStaticss)
+	ui.Bind("downloadExcel", DownloadExcel)
 
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
