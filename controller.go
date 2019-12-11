@@ -435,20 +435,26 @@ func CalcFinanceByDate(date string) string {
 	var resp *Response
 	c := SearchCondition{SearchField: SEARCH_DATE, SearchKeys: []string{date, ""}}
 	resp = SearchPurchaseRecords(c)
-	for _, row := range resp.Rows.([]*PurchaseRecord) {
-		r.Purchase += row.Total
-		r.PurchasedStock += row.Weight
+	if resp.Rows != nil {
+		for _, row := range resp.Rows.([]*PurchaseRecord) {
+			r.Purchase += row.Total
+			r.PurchasedStock += row.Weight
+		}
 	}
 
 	resp = SearchSaleRecords(c)
-	for _, row := range resp.Rows.([]*SaleRecord) {
-		r.Sale += row.Total
-		r.SaledStock += row.Weight
+	if resp.Rows != nil {
+		for _, row := range resp.Rows.([]*SaleRecord) {
+			r.Sale += row.Total
+			r.SaledStock += row.Weight
+		}
 	}
 
 	resp = SearchCostRecords(c)
-	for _, row := range resp.Rows.([]*CostRecord) {
-		r.Cost += row.Total
+	if resp.Rows != nil {
+		for _, row := range resp.Rows.([]*CostRecord) {
+			r.Cost += row.Total
+		}
 	}
 
 	predate, err := nextNDate(date, -1)
