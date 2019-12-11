@@ -8,6 +8,10 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+const (
+	SEARCH_MAX_COUNT = 10000
+)
+
 func verifyPassword(account, password string) string {
 	if hoursleft < 0 {
 		return fmt.Sprintf("试用期已过,请联系%s获取正式版", author)
@@ -58,22 +62,52 @@ func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 		table = table.Filter("provider__icontains", c.SearchKeys[1])
 	}
 
+	var static PurchaseRecord
+	min_date := "99991229"
+	var max_date string
+
 	var rows []*PurchaseRecord
 	table, resp, err := searchPartial(table, c)
 	if err != nil {
-		resp.Error = err.Error()
+		goto ERR
+	}
+
+	if resp.Total == 0 {
+		return
 	}
 
 	_, err = table.All(&rows)
 	if err != nil {
-		return
+		goto ERR
 	}
 
 	resp.Rows = rows
-	log.Println("SearchPurchaseRecords Total count:", resp.Total, len(rows))
-	if resp.Total > 0 {
-		log.Println("SearchPurchaseRecords first:", rows[0])
+	log.Println("SearchPurchaseRecords Total count:", resp.Total, len(rows), rows[0])
+
+	// 统计
+	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
+		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
+		if err != nil {
+			goto ERR
+		}
 	}
+	for _, row := range rows {
+		if min_date > row.Date {
+			min_date = row.Date
+		}
+		if max_date < row.Date {
+			max_date = row.Date
+		}
+		static.Number += row.Number
+		static.Weight += row.Weight
+		static.Total += row.Total
+	}
+	static.Date = min_date + "-<br />" + max_date
+	static.Provider = c.SearchKeys[1]
+	resp.Static = &static
+	return
+ERR:
+	resp.Error = err.Error()
 	return
 }
 
@@ -82,7 +116,8 @@ func searchPartial(table orm.QuerySeter, c SearchCondition) (newtable orm.QueryS
 	resp = new(Response)
 	orders := []string{"-date", "-id"}
 	newtable = table.Filter("deleted", 0)
-	resp.Total, err = newtable.Count()
+	total, err := newtable.Count()
+	resp.Total = int(total)
 	// resp.TotalNotFiltered = resp.Total
 	if err != nil {
 		return

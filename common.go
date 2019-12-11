@@ -25,9 +25,10 @@ type SearchCondition struct {
 
 type Response struct {
 	// TotalNotFiltered int64       `json:"totalNotFiltered"`
-	Total int64       `json:"total"`
-	Rows  interface{} `json:"rows"`
-	Error string
+	Total  int         `json:"total"`
+	Rows   interface{} `json:"rows"`
+	Error  string
+	Static interface{}
 }
 
 func nextNDate(date string, n int) (nd string, err error) {
