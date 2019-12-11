@@ -153,19 +153,19 @@
         // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
         ;
         let TableStatic = {
-            Id: 7,
-            Date: '20021223-<br/>20021224',
-            Provider: '淘2',
-            Number: 3,
-            Weight: 4,
-            Total: 5
+            // Id: 7,
+            // Date: '20021223-<br/>20021224',
+            // Provider: '淘2',
+            // Number: 3,
+            // Weight: 4,
+            // Total: 5
         };
-        var idFormatter = (data) => `统计`;
-        var dateFormatter = (params) => TableStatic.Date;
-        var providerFormatter = (params) => TableStatic.Provider;
-        var numberFormatter = (params) => TableStatic.Number;
-        var weightFormatter = data => TableStatic.Weight;
-        var totalFormatter = data => TableStatic.Total;
+        var idFormatter = data => `统计`;
+        var dateFormatter = data => TableStatic.Date || '';
+        var providerFormatter = data => TableStatic.Provider || '';
+        var numberFormatter = data => TableStatic.Number || '';
+        var weightFormatter = data => TableStatic.Weight || '';
+        var totalFormatter = data => TableStatic.Total || '';
 
         $(document).ready(function () {
             $('#myTable').bootstrapTable('destroy').bootstrapTable({
@@ -240,10 +240,19 @@
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
+                r.rows = r.rows || [];
                 $.each(r.rows, function (i, e) {
                     e.Total = floatRound(e.Total);
                 })
-                TableStatic = r.Static
+
+                TableStatic = r.Static || {};
+                for (let p in TableStatic) {
+                    if (p[0].toLowerCase() === p[0] || p == 'Id' || p == 'Date' || p == 'Provider') {
+                        continue
+                    }
+                    TableStatic[p] = floatRound(TableStatic[p]);
+                }
+
                 $('#myTable').bootstrapTable('load', r);
             }
         };
@@ -271,11 +280,8 @@
                         return
                     }
                     let r = await window.delPurchaseRecord(row.Id)
-                    if (r == "ok") {
-                        $('#myTable').bootstrapTable('remove', {
-                            field: 'Id',
-                            values: [row.Id]
-                        })
+                    if (r == "ok") {                        
+                        refreshData()
                     } else {
                         BootstrapDialog.alert(r)
                         return

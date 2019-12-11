@@ -23,17 +23,17 @@
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row" id="toolbar">
-                <div class="col-xs-6 col-md-1 mtop5">
+                <div class="col-xs-6 col-md-2 mtop5">
                     <a class="btn btn-info form-control " href="menu.html"> <i
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
-                <div class="col-xs-6 col-md-1 mtop5">
+                <div class="col-xs-6 col-md-2 mtop5">
                     <button class="btn btn-info form-control" type="button" data-toggle="modal"
                         data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
 
                 </div>
 
-                <div class="col-xs-12 col-md-10 mtop5">
+                <div class="col-xs-12 col-md-8 mtop5">
                     <div class="input-group">
                         <div class="input-group-btn ">
                             <select class="form-control selectcss" id="searchField">
@@ -50,32 +50,39 @@
             </div>
             <div>
                 <table id="myTable" class="mtop5 table table-condensed " data-pagination="true" data-page-size="31"
-                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false">
+                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false"
+                    data-show-footer="true">
                     <thead>
                         <tr>
-                            <th data-sortable="true" data-align="center" data-field="Id">序号</th>
-                            <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="TeaCost">
+                            <th data-sortable="true" data-align="center" data-field="Id"
+                                data-footer-formatter="idFormatter">序号</th>
+                            <th data-sortable="true" data-align="center" data-field="Date"
+                                data-footer-formatter="dateFormatter">日期</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="TeaCost"
+                                data-footer-formatter="teaFormatter">
                                 茶餐费
                             </th>
                             <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
-                                data-field="LaborCost">
+                                data-field="LaborCost" data-footer-formatter="laborFormatter">
                                 人工费</th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Freight">
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Freight"
+                                data-footer-formatter="freightFormatter">
                                 运费
                             </th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Postage">
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Postage"
+                                data-footer-formatter="postageFormatter">
                                 油费
                             </th>
                             <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
-                                data-field="CartonCost">
+                                data-field="CartonCost" data-footer-formatter="cartonFormatter">
                                 纸箱</th>
                             <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
-                                data-field="Consumables">
+                                data-field="Consumables" data-footer-formatter="consumablesFormatter">
                                 小材</th>
                             <th data-sortable="true" data-align="center" data-title-tooltip="单位:元"
-                                data-field="PackingCharges">包装材料费</th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">合计
+                                data-field="PackingCharges" data-footer-formatter="packingFormatter">包装材料费</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total"
+                                data-footer-formatter="totalFormatter">合计
                             </th>
                             <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
                         </tr>
@@ -153,7 +160,30 @@
     <script src="common.js"></script>
     <script>
         // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
-        ;;
+        ;
+        let TableStatic = {
+            Id: 7,
+            Date: '20021223-<br />20021224',
+            TeaCost: '淘2',
+            LaborCost: 3,
+            Freight: 4,
+            Postage: 6.1,
+            CartonCost: 7.2,
+            Consumables: 8.3,
+            PackingCharges: 9.4,
+            Total: 5
+        };
+        var idFormatter = data => `统计`;
+        var dateFormatter = data => TableStatic.Date || '';
+        var teaFormatter = data => TableStatic.TeaCost || '';
+        var laborFormatter = data => TableStatic.LaborCost || '';
+        var freightFormatter = data => TableStatic.Freight || '';
+        var postageFormatter = data => TableStatic.Postage || '';
+        var cartonFormatter = data => TableStatic.CartonCost || '';
+        var consumablesFormatter = data => TableStatic.Consumables || '';
+        var packingFormatter = data => TableStatic.PackingCharges || '';
+        var totalFormatter = data => TableStatic.Total || '';
+
         $(document).ready(function () {
             $('#myTable').bootstrapTable('destroy').bootstrapTable({
                 data: [{
@@ -218,9 +248,19 @@
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
+                r.rows = r.rows || [];
                 $.each(r.rows, function (i, e) {
                     e.Total = floatRound(e.Total);
                 })
+
+                TableStatic = r.Static || {};
+                for (let p in TableStatic) {
+                    if (p[0].toLowerCase() === p[0] || p == 'Id' || p == 'Date') {
+                        continue
+                    }
+                    TableStatic[p] = floatRound(TableStatic[p]);
+                }
+
                 $('#myTable').bootstrapTable('load', r);
             }
         };
@@ -249,10 +289,7 @@
                     }
                     let r = await window.delCostRecord(row.Id)
                     if (r == "ok") {
-                        $('#myTable').bootstrapTable('remove', {
-                            field: 'Id',
-                            values: [row.Id]
-                        })
+                        refreshData()
                     } else {
                         BootstrapDialog.alert(r)
                         return

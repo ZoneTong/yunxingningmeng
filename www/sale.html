@@ -52,20 +52,27 @@
             </div>
             <div>
                 <table id="myTable" class="mtop5 table table-condensed" data-pagination="true" data-page-size="31"
-                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false">
+                    data-page-list="[31]" data-side-pagination="server" data-silent-sort="false"
+                    data-show-footer="true">
                     <thead>
                         <tr>
-                            <th data-sortable="true" data-align="center" data-field="Id">序号</th>
-                            <th data-sortable="true" data-align="center" data-field="Date">日期</th>
-                            <th data-sortable="true" data-align="center" data-field="Customer">客户名称</th>
+                            <th data-sortable="true" data-align="center" data-field="Id"
+                                data-footer-formatter="idFormatter">序号</th>
+                            <th data-sortable="true" data-align="center" data-field="Date"
+                                data-footer-formatter="dateFormatter">日期</th>
+                            <th data-sortable="true" data-align="center" data-field="Customer"
+                                data-footer-formatter="customerFormatter">客户名称</th>
                             <th data-sortable="true" data-align="center" data-field="Logistics">物流名称</th>
                             <th data-sortable="true" data-align="center" data-field="Specifications">规格</th>
-                            <th data-sortable="true" data-align="center" data-field="Number">件数</th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤" data-field="Weight">
+                            <th data-sortable="true" data-align="center" data-field="Number"
+                                data-footer-formatter="numberFormatter">件数</th>
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:斤" data-field="Weight"
+                                data-footer-formatter="weightFormatter">
                                 净重</th>
                             <th data-sortable="true" data-align="center" data-title-tooltip="单位:元/斤" data-field="Price">
                                 单价</th>
-                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total">合计
+                            <th data-sortable="true" data-align="center" data-title-tooltip="单位:元" data-field="Total"
+                                data-footer-formatter="totalFormatter">合计
                             </th>
                             <th data-field="op" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
                         </tr>
@@ -143,7 +150,22 @@
     <script src="common.js"></script>
     <script>
         // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
-        ;;
+        ;
+        let TableStatic = {
+            Id: 7,
+            Date: '20021223-<br />20021224',
+            Customer: '淘2',
+            Number: 3,
+            Weight: 4,
+            Total: 5
+        };
+        var idFormatter = data => `统计`;
+        var dateFormatter = data => TableStatic.Date || '';
+        var customerFormatter = data => TableStatic.Customer || '';
+        var numberFormatter = data => TableStatic.Number || '';
+        var weightFormatter = data => TableStatic.Weight || '';
+        var totalFormatter = data => TableStatic.Total || '';
+
         $(document).ready(function () {
             $('#myTable').bootstrapTable('destroy').bootstrapTable({
                 data: [{
@@ -197,7 +219,7 @@
 
         // 表格
         var condition = {
-        searchKeys: new Array(2),
+            searchKeys: new Array(2),
         };
         const refreshData = async () => {
             let r = await window.searchSaleRecords(condition);
@@ -206,9 +228,19 @@
                 BootstrapDialog.alert(r.Error);
                 return;
             } else {
+                r.rows = r.rows || [];
                 $.each(r.rows, function (i, e) {
                     e.Total = floatRound(e.Total);
                 })
+
+                TableStatic = r.Static || {};
+                for (let p in TableStatic) {
+                    if (p[0].toLowerCase() === p[0] || p == 'Id' || p == 'Date' || p == 'Customer') {
+                        continue
+                    }
+                    TableStatic[p] = floatRound(TableStatic[p]);
+                }
+
                 $('#myTable').bootstrapTable('load', r);
             }
         };
@@ -237,10 +269,7 @@
                     }
                     let r = await window.delSaleRecord(row.Id)
                     if (r == "ok") {
-                        $('#myTable').bootstrapTable('remove', {
-                            field: 'Id',
-                            values: [row.Id]
-                        })
+                        refreshData()
                     } else {
                         BootstrapDialog.alert(r)
                         return
@@ -250,8 +279,8 @@
         };
 
         function search() {
-        condition.searchKeys[0] = $('#searchKeyDate').val();
-        condition.searchKeys[1] = $('#searchKeyProvider').val();
+            condition.searchKeys[0] = $('#searchKeyDate').val();
+            condition.searchKeys[1] = $('#searchKeyProvider').val();
             refreshData();
         }
         $('#searchKeyDate').change(search);

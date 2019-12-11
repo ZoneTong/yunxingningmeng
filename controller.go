@@ -102,7 +102,7 @@ func SearchPurchaseRecords(c SearchCondition) (resp *Response) {
 		static.Weight += row.Weight
 		static.Total += row.Total
 	}
-	static.Date = min_date + "-<br />" + max_date
+	static.Date = min_date + "-<br/>" + max_date
 	static.Provider = c.SearchKeys[1]
 	resp.Static = &static
 	return
@@ -178,23 +178,52 @@ func SearchSaleRecords(c SearchCondition) (resp *Response) {
 		table = table.Filter("customer__icontains", c.SearchKeys[1])
 	}
 
+	var static SaleRecord
+	min_date := "99991229"
+	var max_date string
+
 	var rows []*SaleRecord
 	table, resp, err := searchPartial(table, c)
 	if err != nil {
-		resp.Error = err.Error()
+		goto ERR
+	}
+
+	if resp.Total == 0 {
+		return
 	}
 
 	_, err = table.All(&rows)
 	if err != nil {
-		return
+		goto ERR
 	}
 
 	resp.Rows = rows
+	log.Println("SearchSaleRecords Total count:", resp.Total, len(rows), rows[0])
 
-	log.Println("SearchSaleRecords Total count:", resp.Total, len(rows))
-	if resp.Total > 0 {
-		log.Println("SearchSaleRecords first:", rows[0])
+	// 统计
+	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
+		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
+		if err != nil {
+			goto ERR
+		}
 	}
+	for _, row := range rows {
+		if min_date > row.Date {
+			min_date = row.Date
+		}
+		if max_date < row.Date {
+			max_date = row.Date
+		}
+		static.Number += row.Number
+		static.Weight += row.Weight
+		static.Total += row.Total
+	}
+	static.Date = min_date + "-<br/>" + max_date
+	static.Customer = c.SearchKeys[1]
+	resp.Static = &static
+	return
+ERR:
+	resp.Error = err.Error()
 	return
 }
 
@@ -232,23 +261,56 @@ func SearchCostRecords(c SearchCondition) (resp *Response) {
 		table = table.Filter("date__icontains", c.SearchKeys[0])
 	}
 
+	var static CostRecord
+	min_date := "99991229"
+	var max_date string
+
 	var rows []*CostRecord
 	table, resp, err := searchPartial(table, c)
 	if err != nil {
-		resp.Error = err.Error()
+		goto ERR
+	}
+
+	if resp.Total == 0 {
+		return
 	}
 
 	_, err = table.All(&rows)
 	if err != nil {
-		return
+		goto ERR
 	}
 
 	resp.Rows = rows
+	log.Println("SearchCostRecords Total count:", resp.Total, len(rows), rows[0])
 
-	log.Println("SearchCostRecords Total count:", resp.Total, len(rows))
-	if resp.Total > 0 {
-		log.Println("SearchCostRecords first:", rows[0])
+	// 统计
+	if resp.Total < SEARCH_MAX_COUNT && resp.Total > len(rows) {
+		_, err = table.Limit(SEARCH_MAX_COUNT, 0).All(&rows)
+		if err != nil {
+			goto ERR
+		}
 	}
+	for _, row := range rows {
+		if min_date > row.Date {
+			min_date = row.Date
+		}
+		if max_date < row.Date {
+			max_date = row.Date
+		}
+		static.TeaCost += row.TeaCost
+		static.LaborCost += row.LaborCost
+		static.Freight += row.Freight
+		static.Postage += row.Postage
+		static.CartonCost += row.CartonCost
+		static.Consumables += row.Consumables
+		static.PackingCharges += row.PackingCharges
+		static.Total += row.Total
+	}
+	static.Date = min_date + "-<br/>" + max_date
+	resp.Static = &static
+	return
+ERR:
+	resp.Error = err.Error()
 	return
 }
 
@@ -347,20 +409,23 @@ func SearchFinanceStaticss(c SearchCondition) (resp *Response) {
 	var rows []*FinanceStatics
 	table, resp, err := searchPartial(table, c)
 	if err != nil {
-		resp.Error = err.Error()
+		goto ERR
+	}
+
+	if resp.Total == 0 {
+		return
 	}
 
 	_, err = table.All(&rows)
 	if err != nil {
-		return
+		goto ERR
 	}
 
 	resp.Rows = rows
-
-	log.Println("SearchFinanceStaticss Total count:", resp.Total, len(rows))
-	if resp.Total > 0 {
-		log.Println("SearchFinanceStaticss first:", rows[0])
-	}
+	log.Println("SearchFinanceStaticss Total count:", resp.Total, len(rows), rows[0])
+	return
+ERR:
+	resp.Error = err.Error()
 	return
 }
 

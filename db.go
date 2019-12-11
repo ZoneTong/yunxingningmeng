@@ -91,7 +91,7 @@ type CostRecord struct {
 	Id   int `orm:"pk;auto;null"`
 	Date string
 
-	TeaCost, LaborCost, Freight, Postage, CartonCost float64
+	TeaCost, LaborCost, Freight, Postage, CartonCost float64 // postage意义更改为油费了
 	Consumables, PackingCharges                      float64
 	Total                                            float64
 
