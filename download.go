@@ -2,14 +2,9 @@ package main
 
 import (
 	"reflect"
-	"strings"
 
 	"github.com/tealeg/xlsx"
 )
-
-func genpath(table string, searchKeys ...string) string {
-	return strings.Join(append([]string{table}, searchKeys...), "_") + ".xlsx"
-}
 
 func saveExcel(path string, rows [][]interface{}, columns []string) (err error) {
 	var file *xlsx.File

@@ -23,33 +23,33 @@
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row " id="toolbar">
-                <div class="col-xs-6 col-md-2 mtop5">
+                <div class="col-xs-6 col-sm-2 mtop5">
                     <a class="btn btn-info form-control " href="menu.html"> <i
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
-                <div class="col-xs-6 col-md-2 mtop5">
+                <div class="col-xs-6 col-sm-2 mtop5">
                     <button class="btn btn-info form-control" type="button" data-toggle="modal"
                         data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
 
                 </div>
 
-                <div class="col-xs-2 col-md-1 mtop5 rpad0">
-                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent" onclick="download()"><img
-                            src="excel.png" height="100%"></img>
+                <div class="col-xs-2 col-sm-1 mtop5 rpad0">
+                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent"
+                        onclick="download()"><img src="excel.png" height="100%"></img>
                     </button>
                 </div>
-                <div class="col-xs-3 col-md-3 mtop5 lpad0 rpad0">
+                <div class="col-xs-4 col-sm-3 mtop5 lpad0 rpad0">
                     <label class="sr-only" for="searchKeyDate"">日期</label>
                     <input class=" form-control rbr0" id="searchKeyDate" type="text" name="date"
-                        placeholder="日期, 例如: 201912">
+                        placeholder="日期, 例: 201912">
                 </div>
-                <div class="col-xs-5 col-md-3 mtop5 lpad0 rpad0 ">
+                <div class="col-xs-4 col-sm-3 mtop5 lpad0 rpad0 ">
                     <label class="sr-only" for="searchKeyProvider">供应商</label>
                     <input class="form-control lbr0 rbr0" id="searchKeyProvider" type="text" name="provider"
                         placeholder="供应商">
                 </div>
 
-                <div class="col-xs-2 col-md-1 mtop5 lpad0 ">
+                <div class="col-xs-2 col-sm-1 mtop5 lpad0 ">
                     <button class="btn btn-info form-control lbr0" type="button" onclick="search();">
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
@@ -145,6 +145,7 @@
             </div>
         </div>
     </div>
+    <!-- <a onclick="openFile('采购__20191022-20191201.xlsx');">采购__20191022-20191201.xlsx</a> -->
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -160,19 +161,25 @@
         const download = async () => {
             condition.searchKeys[0] = $('#searchKeyDate').val();
             condition.searchKeys[1] = $('#searchKeyProvider').val();
-            let table = '采购'
-            let r = await window.downloadExcel(table, condition, [
-                ['Id', '编号'],
+            let r = await window.downloadExcel('采购', condition, [
+                ['Id', '序号'],
                 ['Date', '日期'],
-                ['Provider', '供应商']
+                ['Provider', '供应商'],
+                ['Logistics','物流'],
+                ['Specifications','规格'],
+                ['Number', '件数'],
+                ['Weight', '净重'],
+                ['Price', '单价'],
+                ['Total', '合计'],
             ]);
-            if (r == 'ok') {
+            if (r && r.startsWith('ok') ){
+                let file=r.split('://')[1]
                 let dlg = BootstrapDialog.show({
-                    message: `下载 ${table}_${condition.searchKeys[0]}_${condition.searchKeys[1]}.xlsx 成功`,
+                    message: `下载 <a onclick="openFile('${file}')">${file}</a> 成功`,
                 });
-                setTimeout(function () {
-                    dlg.close();
-                }, 5000);
+                // setTimeout(function () {
+                //     dlg.close();
+                // }, 5000);
             } else {
                 BootstrapDialog.alert(r);
             }

@@ -23,17 +23,21 @@
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row" id="toolbar">
-                <div class="col-xs-6 col-md-2 mtop5">
+                <div class="col-xs-6 col-sm-2 mtop5">
                     <a class="btn btn-info form-control " href="menu.html"> <i
                             class="glyphicon glyphicon-home"></i>&nbsp;主页 </a>
                 </div>
-                <div class="col-xs-6 col-md-2 mtop5">
+                <div class="col-xs-6 col-sm-2 mtop5">
                     <button class="btn btn-info form-control" type="button" data-toggle="modal"
                         data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
 
                 </div>
-
-                <div class="col-xs-12 col-md-8 mtop5">
+                <div class="col-xs-2 col-sm-1 mtop5 rpad0">
+                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent"
+                        onclick="download()"><img src="excel.png" height="100%"></img>
+                    </button>
+                </div>
+                <div class="col-xs-10 col-sm-7 mtop5 lpad0">
                     <div class="input-group">
                         <div class="input-group-btn ">
                             <select class="form-control selectcss" id="searchField">

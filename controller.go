@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"os/exec"
+	"runtime"
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -529,15 +532,47 @@ func DownloadExcel(table string, c SearchCondition, i18nColumns [][]string) stri
 	}
 
 	fileds, zhs := make([]string, 0, len(i18nColumns)), make([]string, 0, len(i18nColumns))
-	for _, pair := range i18nColumns {
+	var iDate = -1
+	for i, pair := range i18nColumns {
+		if pair[0] == "Date" {
+			iDate = i
+		}
 		fileds = append(fileds, pair[0])
 		zhs = append(zhs, pair[1])
 	}
 
 	rows := reflectRowsValues(resp.Rows, fileds)
-	err := saveExcel(genpath(table, c.SearchKeys...), rows, zhs)
+
+	min_date, max_date := INIT_MIN_DATE, ""
+	for _, row := range rows {
+		d := row[iDate].(string)
+		if min_date > d {
+			min_date = d
+		}
+		if max_date < d {
+			max_date = d
+		}
+	}
+
+	var segs []string
+	segs = append(segs, table)
+	segs = append(segs, c.SearchKeys[1:]...)
+	segs = append(segs, min_date+"-"+max_date+".xlsx")
+	path := strings.Join(segs, "_")
+	err := saveExcel(path, rows, zhs)
 	if err != nil {
 		return err.Error()
 	}
-	return "ok"
+
+	return "ok://" + path
+}
+
+func OpenFile(path string) error {
+	OPEN := "open"
+	if runtime.GOOS == "windows" {
+		OPEN = "start"
+	}
+	log.Println(OPEN, path)
+	cmd := exec.Command(OPEN, path)
+	return cmd.Run()
 }

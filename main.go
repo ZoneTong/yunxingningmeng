@@ -80,19 +80,17 @@ func main() {
 	ui.Bind("searchSaleRecords", SearchSaleRecords)
 	ui.Bind("newOrEditSaleRecord", NewOrEditSaleRecord)
 	ui.Bind("delSaleRecord", DelSaleRecord)
-
 	ui.Bind("searchCostRecords", SearchCostRecords)
 	ui.Bind("newOrEditCostRecord", NewOrEditCostRecord)
 	ui.Bind("delCostRecord", DelCostRecord)
-
 	// ui.Bind("searchStockRecords", SearchStockRecords)
 	// ui.Bind("newOrEditStockRecord", NewOrEditStockRecord)
 	// ui.Bind("delStockRecord", DelStockRecord)
-
 	ui.Bind("calcFinanceByPeriod", CalcFinanceByPeriod)
 	ui.Bind("searchFinanceStaticss", SearchFinanceStaticss)
-	ui.Bind("downloadExcel", DownloadExcel)
 
+	ui.Bind("downloadExcel", DownloadExcel)
+	ui.Bind("openFile", OpenFile)
 	// Load HTML.
 	// You may also use `data:text/html,<base64>` approach to load initial HTML,
 	// e.g: ui.Load("data:text/html," + url.PathEscape(html))

@@ -6,6 +6,10 @@ import (
 	"testing"
 )
 
+func TestOpenFile(t *testing.T) {
+	t.Log(OpenFile("/opt/gopath/src/github.com/ZoneTong/yunxingningmeng/采购__.xlsx"))
+}
+
 func TestExportExcel(t *testing.T) {
 	type args struct {
 		values []interface{}
@@ -19,12 +23,12 @@ func TestExportExcel(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ExportExcel(tt.args.values)
+			reflectValues(tt.args.values)
 		})
 	}
 }
 
-func ExportExcel(values []interface{}) {
+func reflectValues(values []interface{}) {
 	if len(values) < 0 {
 		return
 	}
