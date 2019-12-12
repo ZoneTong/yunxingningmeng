@@ -12,14 +12,9 @@
     <link href="css/bootstrapValidator.min.css" rel="stylesheet" />
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="common.css" rel="stylesheet">
-    <style>
-        body {
-            align-items: inherit
-        }
-    </style>
 </head>
 
-<body onload="tableUI()">
+<body>
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row" id="toolbar">
@@ -32,8 +27,8 @@
                         data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>&nbsp;新建</button>
                 </div>
                 <div class="col-xs-2 col-sm-1 mtop5 rpad0">
-                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent" onclick="download()"><img
-                            src="excel.png" height="100%"></img>
+                    <button title="导出文件" class="btn  form-control pad0" style="background:transparent"
+                        onclick="download()"><img src="excel.png" height="100%"></img>
                     </button>
                 </div>
                 <div class="col-xs-4 col-sm-3 mtop5 lpad0 rpad0">
@@ -129,9 +124,6 @@
                                 <label for="Price" class="col-sm-2 control-label">单价(元/斤)</label>
                                 <div class="col-sm-4"><input class="form-control" id="Price" name="Price" type="number"
                                         step="0.50" required /></div>
-                                <!-- <label for="Total" class="col-sm-2 control-label">合计(元)</label>
-                                <div class="col-sm-4"><input class="form-control" id="Total" type="number" readonly
-                                        step="0.50" /></div> -->
                             </div>
                         </form>
                     </div>
@@ -153,8 +145,31 @@
     <script src="js/bootstrap-dialog.min.js"></script>
     <script src="common.js"></script>
     <script>
-        // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
         ;
+        const download = async () => {
+            condition.searchKeys[0] = $('#searchKeyDate').val();
+            condition.searchKeys[1] = $('#searchKeyProvider').val();
+            let r = await window.downloadExcel('销售', condition, [
+                ['Id', '序号'],
+                ['Date', '日期'],
+                ['Customer', '客户'],
+                ['Logistics', '物流'],
+                ['Specifications', '规格'],
+                ['Number', '件数'],
+                ['Weight', '净重'],
+                ['Price', '单价'],
+                ['Total', '合计'],
+            ]);
+            if (r && r.startsWith('ok')) {
+                let file = r.split('://')[1]
+                let dlg = BootstrapDialog.show({
+                    message: `下载 <a onclick="openFile('${file}')">${file}</a> 成功`,
+                });
+            } else {
+                BootstrapDialog.alert(r);
+            }
+        }
+
         let TableStatic = {
             Id: 7,
             Date: '20021223-<br />20021224',
@@ -227,7 +242,6 @@
         };
         const refreshData = async () => {
             let r = await window.searchSaleRecords(condition);
-            // console.log(r);
             if (r.Error && r.Error != '') {
                 BootstrapDialog.alert(r.Error);
                 return;
@@ -351,8 +365,6 @@
             $.each(t, function () {
                 record[this.name] = this.value;
             });
-
-            // console.log(record)                
             record.Id = parseInt(record.Id)
             record.Date = toDBDate(new Date(record.Date));
             record.Number = parseInt(record.Number)

@@ -12,14 +12,9 @@
     <link href="css/bootstrapValidator.min.css" rel="stylesheet" />
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="common.css" rel="stylesheet">
-    <style>
-        body {
-            align-items: inherit
-        }
-    </style>
 </head>
 
-<body onload="tableUI()">
+<body>
     <div class="container-fluid full">
         <div class="main_ui">
             <div class="row" id="toolbar">
@@ -163,8 +158,31 @@
     <script src="js/bootstrap-dialog.min.js"></script>
     <script src="common.js"></script>
     <script>
-        // $.fn.modal.Constructor.prototype.enforceFocus =function(){};
         ;
+        const download = async () => {
+            condition.searchKeys[0] = $('#searchKey').val();
+            let r = await window.downloadExcel('成本', condition, [
+                ['Id', '序号'],
+                ['Date', '日期'],
+                ['TeaCost', '茶餐费'],
+                ['LaborCost', '人工费'],
+                ['Freight', '运费'],
+                ['Postage', '油费'],
+                ['CartonCost', '纸箱'],
+                ['Consumables', '小材'],
+                ['PackingCharges', '包装材料费'],
+                ['Total', '合计'],
+            ]);
+            if (r && r.startsWith('ok')) {
+                let file = r.split('://')[1]
+                let dlg = BootstrapDialog.show({
+                    message: `下载 <a onclick="openFile('${file}')">${file}</a> 成功`,
+                });
+            } else {
+                BootstrapDialog.alert(r);
+            }
+        }
+
         let TableStatic = {
             Id: 7,
             Date: '20021223-<br />20021224',

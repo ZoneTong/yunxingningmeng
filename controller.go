@@ -533,6 +533,7 @@ func DownloadExcel(table string, c SearchCondition, i18nColumns [][]string) stri
 
 	fileds, zhs := make([]string, 0, len(i18nColumns)), make([]string, 0, len(i18nColumns))
 	var iDate = -1
+	log.Println(i18nColumns)
 	for i, pair := range i18nColumns {
 		if pair[0] == "Date" {
 			iDate = i
