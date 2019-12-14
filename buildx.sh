@@ -21,7 +21,7 @@ function pack(){
 function buildwin(){
      # 交叉编译 https://blog.csdn.net/tsxylhs/article/details/91852841
     # 首先 brew install mingw-w64 
-    CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H windowsgui -X main.trialday=36500 -X 'main.builddate=`date +%Y%m%d`'  " -o yunxing.exe
+    CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H windowsgui -X main.trialday=90 -X 'main.builddate=`date +%Y%m%d`'  " -o yunxing.exe
 
     # CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -x -v -ldflags "-s -w -H windowsgui -X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`'  " # 失败, gcc_libinit_windows.c:7:10: fatal error: 'windows.h' file not found
     # GOOS=windows GOARCH=amd64 go build -x -v -ldflags "-s -w -H windowsgui -X main.trialday=2 -X 'main.builddate=`date +%Y%m%d`' "  #失败

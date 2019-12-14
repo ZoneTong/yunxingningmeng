@@ -569,11 +569,14 @@ func DownloadExcel(table string, c SearchCondition, i18nColumns [][]string) stri
 }
 
 func OpenFile(path string) error {
+	var cmd *exec.Cmd
 	OPEN := "open"
 	if runtime.GOOS == "windows" {
 		OPEN = "start"
+		cmd = exec.Command("cmd", "/C", OPEN, path)
+	} else {
+		cmd = exec.Command(OPEN, path)
 	}
-	log.Println(OPEN, path)
-	cmd := exec.Command(OPEN, path)
+
 	return cmd.Run()
 }

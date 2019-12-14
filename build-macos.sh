@@ -4,7 +4,7 @@ APP="macYunxing.app"
 exe="yunxing"
 mkdir -p $APP/Contents/{MacOS,Resources,Frameworks}
 # go build -o $exe -ldflags '-linkmode "external" -extldflags "-static"'  .
-go build -ldflags "-s -w -X main.trialday=3650 -X 'main.builddate=`date +%Y%m%d`'  "
+go build -ldflags "-s -w -X main.trialday=90 -X 'main.builddate=`date +%Y%m%d`'  "
 mv yunxingningmeng $APP/Contents/MacOS/$exe
 
 # install_name_tool -add_rpath @loader_path/../Frameworks $APP/Contents/MacOS/$exe
