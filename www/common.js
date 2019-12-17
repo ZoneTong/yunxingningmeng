@@ -57,8 +57,16 @@ function floatRound(number) {
 }
 
 $('a[href$=html]').each(function () {
+	let h = $(this).attr('href');
+	if (h.trim().startsWith('javascript')) {
+		return;
+	}
 	$(this).attr('val', $(this).attr('href')).attr('href','javascript:;').on('click', function () {
-		var url = $(this).attr('val');
-		window.location.href = url;
+		this.classList.add('stepinto');
+		setTimeout(() => {
+			var url = $(this).attr('val');
+			window.location.href = url;
+			this.classList.remove('stepinto');
+		}, 300);
 	}) ;
 });
