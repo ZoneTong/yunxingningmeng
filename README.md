@@ -10,13 +10,6 @@ make golang ui by"github.com/zserge/lorca"
 - export excel/csv
 ![采购](./docs/desktop/5.png)
 
-## 20191129 android
-
-- login
-![登陆](./docs/android/1.png)![菜单](./docs/android/2.png)
-- purchase
-![采购](./docs/android/3.png)![采购](./docs/android/4.png)![采购](./docs/android/5.png)![采购]./docs/android/6.png)![采购](./docs/android/7.png)![采购](./docs/android/8.png)
-
 ## 20191021 requirements
 
 - login
@@ -29,3 +22,11 @@ make golang ui by"github.com/zserge/lorca"
 - cost
 - stock
 - finance
+
+## 20191129 android
+
+- login
+![登陆](./docs/android/1.png)![菜单](./docs/android/2.png)
+- purchase
+![采购](./docs/android/3.png)![采购](./docs/android/4.png)![采购](./docs/android/5.png)![采购]./docs/android/6.png)![采购](./docs/android/7.png)![采购](./docs/android/8.png)
+
