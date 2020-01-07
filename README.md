@@ -15,9 +15,7 @@ make golang ui by"github.com/zserge/lorca"
 - login
 ![登陆](./docs/android/1.png)![菜单](./docs/android/2.png)
 - purchase
-![采购](./docs/android/3.png)![采购](./docs/android/4.png)
-![采购](./docs/android/5.png)![采购](./docs/android/6.png)
-![采购](./docs/android/7.png)![采购](./docs/android/8.png)
+![采购](./docs/android/3.png)![采购](./docs/android/4.png)![采购](./docs/android/5.png)![采购]./docs/android/6.png)![采购](./docs/android/7.png)![采购](./docs/android/8.png)
 
 ## 20191021 requirements
 
